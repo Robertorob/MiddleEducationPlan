@@ -17,3 +17,6 @@
 7/11/2020
 Create subscription, resource group                         2h
 
+7/18/2020	18:00
+Create dummy Rest API service and deploy to Azure			3h
+
