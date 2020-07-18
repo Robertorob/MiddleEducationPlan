@@ -14,5 +14,6 @@
 
 ## Timesheet
 
-
+7/11/2020
+Create subscription, resource group                         2h
 
