@@ -5,9 +5,10 @@
 |-|-|-|
 | 1 | Create subscription, resource group | 2h |
 | 2 | Create dummy Rest API service and deploy to Azure  | 4h |
-| 3 | Create Tables in Azure Table Storage and connect to them from code |	4h |
-| 4 | Add CRUD functionality for Project | 8h |
-| 5 | Add CRUD functionality for Task | 8h |
+| 3 | Create Azure KeyVault service | 4h |
+| 4 | Create Azure Table Storage Service | 8h |
+| 5 | Add CRUD functionality for Project | 8h |
+| 6 | Add CRUD functionality for Task | 8h |
 
 ## Timesheet
 | Datetime | Task Description | Spent |
