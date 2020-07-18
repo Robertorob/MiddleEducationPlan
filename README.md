@@ -6,7 +6,7 @@
 
 1. Create dummy Rest API service and deploy to Azure        4h
 
-1. Create Tables in Azure Table Storage                     4h
+1. Create Tables in Azure Table Storage and connect them	4h
 
 1. Add CRUD functionality for Project                       8h
 
