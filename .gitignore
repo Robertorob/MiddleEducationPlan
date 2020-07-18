@@ -409,4 +409,4 @@ msbuild.wrn
 
 # Temp build folder
 /Temp/Precompile/
-/Azure/appsettings.Development.json
+/MiddleEducationPlan/MiddleEducationPlan/appsettings.Development.json
