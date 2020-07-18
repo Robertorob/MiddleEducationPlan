@@ -14,6 +14,7 @@ using Microsoft.Extensions.Azure;
 using Azure.Storage.Queues;
 using Azure.Storage.Blobs;
 using Azure.Core.Extensions;
+using MiddleEducationPlan.Services;
 
 namespace MiddleEducationPlan
 {
@@ -29,6 +30,8 @@ namespace MiddleEducationPlan
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<AzureKeyVaultService>();
+
             services.AddControllers();
             services.AddAzureClients(builder =>
             {
