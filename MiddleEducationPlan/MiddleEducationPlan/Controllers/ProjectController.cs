@@ -23,28 +23,16 @@ namespace MiddleEducationPlan.Controllers
         }
 
         [HttpGet]
-        public ActionResult Get()
+        public async Task<ActionResult> Get()
         {
-            return Ok( new List<Project>() 
-            {
-                new Project{Name= "p", Code = 1},
-                new Project{Name= "p2", Code = 2}
-            });
+            return Ok(await _storageAccountService.GetProjects());
         }
 
         [HttpPost]
         [Route("post")]
         public async Task<ActionResult> Post([FromBody] Project project)
         {
-            //Project project = new Project
-            //{
-            //    Name = "Project",
-            //    Code = 1
-            //};
-            var g = await _storageAccountService.AddProject(project);
-
-
-            return Ok(g);
+            return Ok(await _storageAccountService.AddProject(project));
         }
     }
 }
