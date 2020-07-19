@@ -31,8 +31,10 @@ namespace MiddleEducationPlan
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<AzureKeyVaultService>();
+            services.AddSingleton<StorageAccountService>();
 
             services.AddControllers();
+
             services.AddAzureClients(builder =>
             {
                 builder.AddBlobServiceClient(Configuration["ConnectionStrings:StorageAccountConnectionString:blob"], preferMsi: true);
