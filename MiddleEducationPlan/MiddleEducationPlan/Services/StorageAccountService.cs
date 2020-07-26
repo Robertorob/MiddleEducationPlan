@@ -34,6 +34,7 @@ namespace MiddleEducationPlan.Services
                 await table.CreateIfNotExistsAsync();
 
                 project.Id = Guid.NewGuid();
+                project.Code = await GetProjectCodeAndIncrement(table);
                 project.PartitionKey = project.Code.ToString();
                 project.RowKey = project.Id.ToString();
                 TableOperation insert = TableOperation.Insert(project);
@@ -45,6 +46,19 @@ namespace MiddleEducationPlan.Services
 
                 throw;
             }
+        }
+
+        private async Task<int> GetProjectCodeAndIncrement(CloudTable table)
+        {
+            TableQuery<Project> query = new TableQuery<Project>()
+                    .Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, "0"));
+            var idEntity = (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
+            idEntity.Code++;
+            TableOperation incrementCode = TableOperation.InsertOrReplace(idEntity);
+
+            await table.ExecuteAsync(incrementCode);
+
+            return idEntity.Code;
         }
 
         public async Task<TableResult> UpdateProject(Project project)
