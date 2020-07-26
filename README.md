@@ -9,6 +9,9 @@
 | 4 | Create Azure Table Storage Service | 8h |
 | 5 | Add CRUD functionality for Project | 8h |
 | 6 | Add CRUD functionality for Task | 8h |
+| 7 | Add error handling and logging | 8h |
+| 8 | Add Swagger | 4h |
+| 9 | Add unit tests | 4h |
 
 ## Timesheet
 | Datetime | Task Description | Spent |
