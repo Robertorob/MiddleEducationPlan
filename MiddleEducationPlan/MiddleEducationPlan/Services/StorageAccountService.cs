@@ -2,6 +2,7 @@
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using MiddleEducationPlan.Models;
+using MiddleEducationPlan.TableEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,70 +27,66 @@ namespace MiddleEducationPlan.Services
             this.tableClient = this.storageAccount.CreateCloudTableClient();
         }
 
-        public async Task<TableResult> AddProject(Project project)
+        public async Task<TableResult> AddProject(AddProjectModel project)
         {
-            try
-            {
-                CloudTable table = this.tableClient.GetTableReference("Project");
-                await table.CreateIfNotExistsAsync();
+            var table = this.tableClient.GetTableReference("Project");
+            await table.CreateIfNotExistsAsync();
 
-                project.Id = Guid.NewGuid();
-                project.Code = await GetProjectCodeAndIncrement(table);
-                project.PartitionKey = project.Code.ToString();
-                project.RowKey = project.Id.ToString();
-                TableOperation insert = TableOperation.Insert(project);
+            var projectEntity = new ProjectEntity();
 
-                return await table.ExecuteAsync(insert);
-            }
-            catch (Exception exc)
-            {
+            projectEntity.Id = Guid.NewGuid();
+            projectEntity.Code = await GetProjectCodeAndIncrement(table);
+            projectEntity.PartitionKey = projectEntity.Code.ToString();
+            projectEntity.RowKey = projectEntity.Id.ToString();
+            projectEntity.Name = project.Name;
 
-                throw;
-            }
+            var insert = TableOperation.Insert(projectEntity);
+
+            return await table.ExecuteAsync(insert);
         }
 
         private async Task<int> GetProjectCodeAndIncrement(CloudTable table)
         {
-            TableQuery<Project> query = new TableQuery<Project>()
+            var query = new TableQuery<ProjectEntity>()
                     .Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, "0"));
             var idEntity = (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
             idEntity.Code++;
-            TableOperation incrementCode = TableOperation.InsertOrReplace(idEntity);
+            var incrementCode = TableOperation.InsertOrReplace(idEntity);
 
             await table.ExecuteAsync(incrementCode);
 
             return idEntity.Code;
         }
 
-        public async Task<TableResult> UpdateProject(Project project)
+        public async Task<TableResult> UpdateProject(UpdateProjectModel project)
         {
-            try
-            {
-                CloudTable table = this.tableClient.GetTableReference("Project");
-                await table.CreateIfNotExistsAsync();
-
-                TableOperation tableOperation = TableOperation.InsertOrReplace(project);
-
-                return await table.ExecuteAsync(tableOperation);
-            }
-            catch (Exception exc)
-            {
-
-                throw;
-            }
-        }
-
-        public async Task<List<Project>> GetProjects()
-        {
-            CloudTable table = this.tableClient.GetTableReference("Project");
+            var table = this.tableClient.GetTableReference("Project");
             await table.CreateIfNotExistsAsync();
 
-            TableQuery<Project> query = new TableQuery<Project>();
-                    //.Where(TableQuery.GenerateFilterCondition("EntityName", QueryComparisons.NotEqual, "Id"));
+            var query = new TableQuery<ProjectEntity>()
+                .Where(TableQuery.GenerateFilterConditionForInt("Code", QueryComparisons.Equal, project.Code));
 
-            var g = await table.ExecuteQuerySegmentedAsync(query, null);
+            var asdf = (await table.ExecuteQuerySegmentedAsync(query, null));
 
-            return g.ToList();
+            var projectEntity = asdf.Results.FirstOrDefault();
+
+            projectEntity.Name = project.Name;
+
+            TableOperation tableOperation = TableOperation.InsertOrReplace(projectEntity);
+
+            return await table.ExecuteAsync(tableOperation);
+        }
+
+        public async Task<List<ProjectEntity>> GetProjects()
+        {
+            var table = this.tableClient.GetTableReference("Project");
+            await table.CreateIfNotExistsAsync();
+
+            var query = new TableQuery<ProjectEntity>();
+
+            var projects = await table.ExecuteQuerySegmentedAsync(query, null);
+
+            return projects.ToList();
         }
     }
 }

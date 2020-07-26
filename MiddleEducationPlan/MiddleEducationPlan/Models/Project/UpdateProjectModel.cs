@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace MiddleEducationPlan.Models
 {
-    public class Project : TableEntity
+    public class UpdateProjectModel
     {
-        public Guid Id { get; set; }
         public int Code { get; set; }
         public string Name { get; set; }
         public IEnumerable<Task> Tasks { get; set; }
