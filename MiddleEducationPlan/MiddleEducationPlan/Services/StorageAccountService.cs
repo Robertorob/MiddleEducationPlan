@@ -14,23 +14,23 @@ namespace MiddleEducationPlan.Services
         private readonly IConfiguration configuration;
         private readonly AzureKeyVaultService keyVaultServie;
         private readonly string storageAccountConnectionString;
+        private readonly CloudStorageAccount storageAccount;
+        private readonly CloudTableClient tableClient;
 
         public StorageAccountService(IConfiguration configuration, AzureKeyVaultService keyVaultServie)
         {
             this.configuration = configuration;
             this.keyVaultServie = keyVaultServie;
             this.storageAccountConnectionString = this.keyVaultServie.GetConnectionString("StorageAccountConnectionString");
-            
-
+            this.storageAccount = CloudStorageAccount.Parse(this.storageAccountConnectionString);
+            this.tableClient = this.storageAccount.CreateCloudTableClient();
         }
 
         public async Task<TableResult> AddProject(Project project)
         {
             try
             {
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(this.storageAccountConnectionString);
-                CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-                CloudTable table = tableClient.GetTableReference("Project");
+                CloudTable table = this.tableClient.GetTableReference("Project");
                 await table.CreateIfNotExistsAsync();
 
                 project.PartitionKey = project.Code.ToString();
@@ -50,14 +50,12 @@ namespace MiddleEducationPlan.Services
         {
             try
             {
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(this.storageAccountConnectionString);
-                CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-                CloudTable table = tableClient.GetTableReference("Project");
+                CloudTable table = this.tableClient.GetTableReference("Project");
                 await table.CreateIfNotExistsAsync();
 
-                TableOperation incrementId = TableOperation.InsertOrReplace(project);
+                TableOperation tableOperation = TableOperation.InsertOrReplace(project);
 
-                return await table.ExecuteAsync(incrementId);
+                return await table.ExecuteAsync(tableOperation);
             }
             catch (Exception exc)
             {
@@ -68,9 +66,7 @@ namespace MiddleEducationPlan.Services
 
         public async Task<List<Project>> GetProjects()
         {
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(this.storageAccountConnectionString);
-            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            CloudTable table = tableClient.GetTableReference("Project");
+            CloudTable table = this.tableClient.GetTableReference("Project");
             await table.CreateIfNotExistsAsync();
 
             TableQuery<Project> query = new TableQuery<Project>();
