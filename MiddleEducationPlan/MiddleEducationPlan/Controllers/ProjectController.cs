@@ -29,8 +29,8 @@ namespace MiddleEducationPlan.Controllers
         }
 
         [HttpPost]
-        [Route("post")]
-        public async Task<ActionResult> Post([FromBody] UpdateProjectModel project)
+        [Route("add")]
+        public async Task<ActionResult> Post([FromBody] AddProjectModel project)
         {
             return Ok(await _storageAccountService.AddProject(project));
         }

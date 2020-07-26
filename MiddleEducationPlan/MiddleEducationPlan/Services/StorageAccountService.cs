@@ -45,19 +45,6 @@ namespace MiddleEducationPlan.Services
             return await table.ExecuteAsync(insert);
         }
 
-        private async Task<int> GetProjectCodeAndIncrement(CloudTable table)
-        {
-            var query = new TableQuery<ProjectEntity>()
-                    .Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, "0"));
-            var idEntity = (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
-            idEntity.Code++;
-            var incrementCode = TableOperation.InsertOrReplace(idEntity);
-
-            await table.ExecuteAsync(incrementCode);
-
-            return idEntity.Code;
-        }
-
         public async Task<TableResult> UpdateProject(UpdateProjectModel project)
         {
             var table = this.tableClient.GetTableReference("Project");
@@ -87,6 +74,19 @@ namespace MiddleEducationPlan.Services
             var projects = await table.ExecuteQuerySegmentedAsync(query, null);
 
             return projects.ToList();
+        }
+
+        private async Task<int> GetProjectCodeAndIncrement(CloudTable table)
+        {
+            var query = new TableQuery<ProjectEntity>()
+                    .Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, "0"));
+            var idEntity = (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
+            idEntity.Code++;
+            var incrementCode = TableOperation.InsertOrReplace(idEntity);
+
+            await table.ExecuteAsync(incrementCode);
+
+            return idEntity.Code;
         }
     }
 }
