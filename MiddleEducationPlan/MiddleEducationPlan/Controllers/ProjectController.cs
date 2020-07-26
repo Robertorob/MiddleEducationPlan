@@ -30,16 +30,23 @@ namespace MiddleEducationPlan.Controllers
 
         [HttpPost]
         [Route("add")]
-        public async Task<ActionResult> Post([FromBody] AddProjectModel project)
+        public async Task<ActionResult> Add([FromBody] AddProjectModel project)
         {
             return Ok(await _storageAccountService.AddProject(project));
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("update")]
         public async Task<ActionResult> Update([FromBody] UpdateProjectModel project)
         {
             return Ok(await _storageAccountService.UpdateProject(project));
+        }
+
+        [HttpDelete]
+        [Route("delete/{projectCode}")]
+        public async Task<ActionResult> Delete(int projectCode)
+        {
+            return Ok(await _storageAccountService.DeleteProject(projectCode));
         }
     }
 }

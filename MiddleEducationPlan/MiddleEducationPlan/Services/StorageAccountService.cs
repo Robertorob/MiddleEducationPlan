@@ -40,9 +40,9 @@ namespace MiddleEducationPlan.Services
             projectEntity.RowKey = projectEntity.Id.ToString();
             projectEntity.Name = project.Name;
 
-            var insert = TableOperation.Insert(projectEntity);
+            var insertOperation = TableOperation.Insert(projectEntity);
 
-            return await table.ExecuteAsync(insert);
+            return await table.ExecuteAsync(insertOperation);
         }
 
         public async Task<TableResult> UpdateProject(UpdateProjectModel project)
@@ -53,15 +53,28 @@ namespace MiddleEducationPlan.Services
             var query = new TableQuery<ProjectEntity>()
                 .Where(TableQuery.GenerateFilterConditionForInt("Code", QueryComparisons.Equal, project.Code));
 
-            var asdf = (await table.ExecuteQuerySegmentedAsync(query, null));
-
-            var projectEntity = asdf.Results.FirstOrDefault();
+            var projectEntity = (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
 
             projectEntity.Name = project.Name;
 
-            TableOperation tableOperation = TableOperation.InsertOrReplace(projectEntity);
+            var insertOrReplaceOperation = TableOperation.InsertOrReplace(projectEntity);
 
-            return await table.ExecuteAsync(tableOperation);
+            return await table.ExecuteAsync(insertOrReplaceOperation);
+        }
+
+        public async Task<TableResult> DeleteProject(int projectCode)
+        {
+            var table = this.tableClient.GetTableReference("Project");
+            await table.CreateIfNotExistsAsync();
+
+            var query = new TableQuery<ProjectEntity>()
+                .Where(TableQuery.GenerateFilterConditionForInt("Code", QueryComparisons.Equal, projectCode));
+
+            var projectEntity = (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
+
+            var deleteOperation = TableOperation.Delete(projectEntity);
+
+            return await table.ExecuteAsync(deleteOperation);
         }
 
         public async Task<List<ProjectEntity>> GetProjects()
