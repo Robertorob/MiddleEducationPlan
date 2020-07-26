@@ -33,8 +33,9 @@ namespace MiddleEducationPlan.Services
                 CloudTable table = this.tableClient.GetTableReference("Project");
                 await table.CreateIfNotExistsAsync();
 
+                project.Id = Guid.NewGuid();
                 project.PartitionKey = project.Code.ToString();
-                project.RowKey = Guid.NewGuid().ToString();
+                project.RowKey = project.Id.ToString();
                 TableOperation insert = TableOperation.Insert(project);
 
                 return await table.ExecuteAsync(insert);
