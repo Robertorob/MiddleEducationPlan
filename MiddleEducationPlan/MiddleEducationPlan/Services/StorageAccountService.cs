@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace MiddleEducationPlan.Services
 {
-    public class StorageAccountService
+    public abstract class StorageAccountService
     {
         private readonly IConfiguration configuration;
         private readonly AzureKeyVaultService keyVaultServie;
         private readonly string storageAccountConnectionString;
         private readonly CloudStorageAccount storageAccount;
-        private readonly CloudTableClient tableClient;
+        protected readonly CloudTableClient tableClient;
 
         public StorageAccountService(IConfiguration configuration, AzureKeyVaultService keyVaultServie)
         {
@@ -28,20 +28,11 @@ namespace MiddleEducationPlan.Services
             this.tableClient = this.storageAccount.CreateCloudTableClient();
         }
 
-        public async Task<TableResult> AddProjectAsync(AddProjectModel project)
+        public async Task<TableResult> AddEntityAsync(TableEntity entity, CloudTable table)
         {
-            var table = this.tableClient.GetTableReference("Project");
             await table.CreateIfNotExistsAsync();
 
-            var projectEntity = new ProjectEntity();
-
-            projectEntity.Id = Guid.NewGuid();
-            projectEntity.Code = await GetProjectCodeAndIncrementAsync(table);
-            projectEntity.PartitionKey = projectEntity.Code.ToString();
-            projectEntity.RowKey = projectEntity.Id.ToString();
-            projectEntity.Name = project.Name;
-
-            var insertOperation = TableOperation.Insert(projectEntity);
+            var insertOperation = TableOperation.Insert(entity);
 
             return await table.ExecuteAsync(insertOperation);
         }
@@ -102,7 +93,7 @@ namespace MiddleEducationPlan.Services
             return projects.ToList();
         }
 
-        private async Task<int> GetProjectCodeAndIncrementAsync(CloudTable table)
+        protected async Task<int> GetProjectCodeAndIncrementAsync(CloudTable table)
         {
             var query = new TableQuery<ProjectEntity>()
                     .Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, "0"));

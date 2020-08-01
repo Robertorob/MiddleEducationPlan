@@ -15,26 +15,26 @@ namespace MiddleEducationPlan.Controllers
     [Route("api/[controller]")]
     public class ProjectController : ControllerBase
     {
-        private readonly ILogger<ProjectController> _logger;
-        private readonly StorageAccountService _storageAccountService;
+        private readonly ILogger<ProjectController> logger;
+        private readonly ProjectService projectService;
 
-        public ProjectController(ILogger<ProjectController> logger, StorageAccountService storageAccountService)
+        public ProjectController(ILogger<ProjectController> logger, ProjectService projectService)
         {
-            _logger = logger;
-            _storageAccountService = storageAccountService;
+            this.logger = logger;
+            this.projectService = projectService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult> GetProjectsAsync([FromQuery] GetProjectModel filter)
-        {
-            return Ok(await _storageAccountService.GetProjectsAsync(filter));
-        }
+        //[HttpGet]
+        //public async Task<ActionResult> GetProjectsAsync([FromQuery] GetProjectModel filter)
+        //{
+        //    return Ok(await this.storageAccountService.GetProjectsAsync(filter));
+        //}
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult> Get(Guid id)
-        {
-            return Ok(await _storageAccountService.GetProjectByIdAsync(id));
-        }
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult> Get(Guid id)
+        //{
+        //    return Ok(await this.storageAccountService.GetProjectByIdAsync(id));
+        //}
 
         [HttpPost]
         public async Task<ActionResult> Add([FromBody] AddProjectModel project)
@@ -42,22 +42,22 @@ namespace MiddleEducationPlan.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            return Ok(await _storageAccountService.AddProjectAsync(project));
+            return Ok(await this.projectService.AddProjectAsync(project));
         }
 
-        [HttpPut]
-        public async Task<ActionResult> Update([FromBody] UpdateProjectModel project)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState.GetErrorMessages());
+        //[HttpPut]
+        //public async Task<ActionResult> Update([FromBody] UpdateProjectModel project)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState.GetErrorMessages());
 
-            return Ok(await _storageAccountService.UpdateProjectAsync(project));
-        }
+        //    return Ok(await this.storageAccountService.UpdateProjectAsync(project));
+        //}
 
-        [HttpDelete("{code}")]
-        public async Task<ActionResult> Delete(int code)
-        {
-            return Ok(await _storageAccountService.DeleteProjectAsync(code));
-        }
+        //[HttpDelete("{code}")]
+        //public async Task<ActionResult> Delete(int code)
+        //{
+        //    return Ok(await this.storageAccountService.DeleteProjectAsync(code));
+        //}
     }
 }
