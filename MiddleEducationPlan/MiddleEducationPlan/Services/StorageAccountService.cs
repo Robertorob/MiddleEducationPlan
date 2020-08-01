@@ -2,6 +2,7 @@
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 using MiddleEducationPlan.Models;
+using MiddleEducationPlan.Models.Project;
 using MiddleEducationPlan.TableEntities;
 using System;
 using System.Collections.Generic;
@@ -77,7 +78,7 @@ namespace MiddleEducationPlan.Services
             return await table.ExecuteAsync(deleteOperation);
         }
 
-        public async Task<List<ProjectEntity>> GetAllProjectsAsync()
+        public async Task<List<ProjectEntity>> GetProjectsAsync(GetProjectModel filter)
         {
             var table = this.tableClient.GetTableReference("Project");
             await table.CreateIfNotExistsAsync();
@@ -89,12 +90,12 @@ namespace MiddleEducationPlan.Services
             return projects.ToList();
         }
 
-        public async Task<List<ProjectEntity>> GetProjectsAsync()
+        public async Task<List<ProjectEntity>> GetProjectByIdAsync(Guid id)
         {
             var table = this.tableClient.GetTableReference("Project");
             await table.CreateIfNotExistsAsync();
 
-            var query = new TableQuery<ProjectEntity>();
+            var query = new TableQuery<ProjectEntity>().Where(TableQuery.GenerateFilterConditionForGuid("Id", QueryComparisons.Equal, id));
 
             var projects = await table.ExecuteQuerySegmentedAsync(query, null);
 

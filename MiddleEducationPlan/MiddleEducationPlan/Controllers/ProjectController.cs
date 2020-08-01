@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MiddleEducationPlan.Extensions;
 using MiddleEducationPlan.Models;
+using MiddleEducationPlan.Models.Project;
 using MiddleEducationPlan.Services;
 
 namespace MiddleEducationPlan.Controllers
@@ -24,15 +25,15 @@ namespace MiddleEducationPlan.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAllProjectsAsync()
+        public async Task<ActionResult> GetProjectsAsync([FromQuery] GetProjectModel filter)
         {
-            return Ok(await _storageAccountService.GetAllProjectsAsync());
+            return Ok(await _storageAccountService.GetProjectsAsync(filter));
         }
 
-        [HttpGet("{code}")]
-        public async Task<ActionResult> Get()
+        [HttpGet("{id}")]
+        public async Task<ActionResult> Get(Guid id)
         {
-            return Ok(await _storageAccountService.GetProjectsAsync());
+            return Ok(await _storageAccountService.GetProjectByIdAsync(id));
         }
 
         [HttpPost]
