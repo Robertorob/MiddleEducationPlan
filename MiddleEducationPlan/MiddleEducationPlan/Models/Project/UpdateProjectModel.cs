@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MiddleEducationPlan.Models
+namespace MiddleEducationPlan.Models.Project
 {
     public class UpdateProjectModel
     {
