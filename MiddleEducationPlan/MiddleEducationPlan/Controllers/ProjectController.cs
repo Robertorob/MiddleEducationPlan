@@ -38,8 +38,7 @@ namespace MiddleEducationPlan.Controllers
         [HttpPost]
         public async Task<ActionResult> Add([FromBody] AddProjectModel project)
         {
-            //if (!ModelState.IsValid)
-            if (true)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
             return Ok(await _storageAccountService.AddProjectAsync(project));
@@ -48,6 +47,9 @@ namespace MiddleEducationPlan.Controllers
         [HttpPut]
         public async Task<ActionResult> Update([FromBody] UpdateProjectModel project)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState.GetErrorMessages());
+
             return Ok(await _storageAccountService.UpdateProjectAsync(project));
         }
 
