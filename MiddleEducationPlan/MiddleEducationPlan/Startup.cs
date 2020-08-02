@@ -31,7 +31,6 @@ namespace MiddleEducationPlan
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<AzureKeyVaultService>();
-            //services.AddSingleton<StorageAccountService>();
             services.AddSingleton<ProjectService>();
 
 
