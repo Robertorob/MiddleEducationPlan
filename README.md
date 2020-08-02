@@ -23,4 +23,5 @@
 | 7/26/2020	15:50 | 4. Create Azure Table Storage Service	| 1h |
 | 7/26/2020	19:05 | 5. Add CRUD functionality for Project	| 3h |
 | 8/2/2020	16:02 | 5. Add CRUD functionality for Project	| 2h |
+| 8/2/2020	18:31 | 5. Add CRUD functionality for Project	| 1h |
 
