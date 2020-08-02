@@ -69,10 +69,15 @@ namespace MiddleEducationPlan.Controllers
             return Ok(result);
         }
 
-        //[HttpDelete("{code}")]
-        //public async Task<ActionResult> Delete(int code)
-        //{
-        //    return Ok(await this.storageAccountService.DeleteProjectAsync(code));
-        //}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            var result = await this.projectService.GetProjectByIdAsync(id);
+
+            if (result == null)
+                return NotFound();
+
+            return Ok(await this.projectService.DeleteProjectByIdAsync(id));
+        }
     }
 }
