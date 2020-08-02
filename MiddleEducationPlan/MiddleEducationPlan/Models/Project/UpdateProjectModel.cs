@@ -8,7 +8,6 @@ namespace MiddleEducationPlan.Models.Project
 {
     public class UpdateProjectModel
     {
-        public int Code { get; set; }
         public string Name { get; set; }
         public IEnumerable<Task> Tasks { get; set; }
     }

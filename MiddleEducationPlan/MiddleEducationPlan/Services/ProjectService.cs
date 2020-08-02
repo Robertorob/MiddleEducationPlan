@@ -12,12 +12,12 @@ namespace MiddleEducationPlan.Services
 {
     public class ProjectService : StorageAccountService
     {
-        private const string entityName = "Project";
+        private const string ENTITY_NAME = "Project";
         private readonly CloudTable table;
 
         public ProjectService(IConfiguration configuration, AzureKeyVaultService keyVaultServie) : base(configuration, keyVaultServie) 
         { 
-            this.table = this.tableClient.GetTableReference(entityName);
+            this.table = this.tableClient.GetTableReference(ProjectService.ENTITY_NAME);
         }
 
         public async Task<TableResult> AddProjectAsync(AddProjectModel project)
@@ -36,7 +36,7 @@ namespace MiddleEducationPlan.Services
 
         public async Task<TableResult> UpdateProjectAsync(Guid id, UpdateProjectModel project)
         {
-            var projectEntity = (ProjectEntity) await this.GetEntityById(id, this.table);
+            var projectEntity = await this.GetEntityById<ProjectEntity>(id, this.table);
 
             if (projectEntity == null)
                 return null;
@@ -44,6 +44,11 @@ namespace MiddleEducationPlan.Services
             projectEntity.Name = project.Name;
 
             return await this.UpdateEntityAsync(projectEntity, this.table);
+        }
+
+        public async Task<ProjectEntity> GetProjectByIdAsync(Guid id)
+        {
+            return await GetEntityById<ProjectEntity>(id, this.table);
         }
     }
 }

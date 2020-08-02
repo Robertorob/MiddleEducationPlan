@@ -44,9 +44,9 @@ namespace MiddleEducationPlan.Services
             return await table.ExecuteAsync(insertOrReplaceOperation);
         }
 
-        public async Task<TableEntity> GetEntityById(Guid id, CloudTable table)
+        public async Task<T> GetEntityById<T>(Guid id, CloudTable table) where T : TableEntity, new()
         {
-            var query = new TableQuery<ProjectEntity>()
+            var query = new TableQuery<T>()
                 .Where(TableQuery.GenerateFilterConditionForGuid("Id", QueryComparisons.Equal, id));
 
             return (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
@@ -73,18 +73,6 @@ namespace MiddleEducationPlan.Services
             await table.CreateIfNotExistsAsync();
 
             var query = new TableQuery<ProjectEntity>();
-
-            var projects = await table.ExecuteQuerySegmentedAsync(query, null);
-
-            return projects.ToList();
-        }
-
-        public async Task<List<ProjectEntity>> GetProjectByIdAsync(Guid id)
-        {
-            var table = this.tableClient.GetTableReference("Project");
-            await table.CreateIfNotExistsAsync();
-
-            var query = new TableQuery<ProjectEntity>().Where(TableQuery.GenerateFilterConditionForGuid("Id", QueryComparisons.Equal, id));
 
             var projects = await table.ExecuteQuerySegmentedAsync(query, null);
 

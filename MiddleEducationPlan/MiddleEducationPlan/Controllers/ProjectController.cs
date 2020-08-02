@@ -30,11 +30,16 @@ namespace MiddleEducationPlan.Controllers
         //    return Ok(await this.storageAccountService.GetProjectsAsync(filter));
         //}
 
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult> Get(Guid id)
-        //{
-        //    return Ok(await this.storageAccountService.GetProjectByIdAsync(id));
-        //}
+        [HttpGet("{id}")]
+        public async Task<ActionResult> Get(Guid id)
+        {
+            var result = await this.projectService.GetProjectByIdAsync(id);
+
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
 
         [HttpPost]
         public async Task<ActionResult> Add([FromBody] AddProjectModel project)
@@ -55,6 +60,7 @@ namespace MiddleEducationPlan.Controllers
 
             if (result == null)
                 return NotFound();
+
             return Ok(result);
         }
 
