@@ -103,5 +103,10 @@ namespace MiddleEducationPlan.Services
 
             return idEntity.Code;
         }
+
+        public async Task<TableResult> DeleteProjectByIdAsync(Guid id)
+        {
+            return await DeleteEntityByIdAsync(id, this.table);
+        }
     }
 }

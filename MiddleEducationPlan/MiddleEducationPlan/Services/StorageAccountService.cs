@@ -1,11 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
-using MiddleEducationPlan.Models;
-using MiddleEducationPlan.Models.Project;
-using MiddleEducationPlan.TableEntities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -53,17 +49,14 @@ namespace MiddleEducationPlan.Services
             return (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
         }
 
-        public async Task<TableResult> DeleteProjectAsync(int projectCode)
+        public async Task<TableResult> DeleteEntityByIdAsync(Guid id, CloudTable table)
         {
-            var table = this.tableClient.GetTableReference("Project");
-            await table.CreateIfNotExistsAsync();
+            var query = new TableQuery<TEntity>()
+                .Where(TableQuery.GenerateFilterConditionForGuid("Id", QueryComparisons.Equal, id));
 
-            var query = new TableQuery<ProjectEntity>()
-                .Where(TableQuery.GenerateFilterConditionForInt("Code", QueryComparisons.Equal, projectCode));
+            var entity = (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
 
-            var projectEntity = (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
-
-            var deleteOperation = TableOperation.Delete(projectEntity);
+            var deleteOperation = TableOperation.Delete(entity);
 
             return await table.ExecuteAsync(deleteOperation);
         }
