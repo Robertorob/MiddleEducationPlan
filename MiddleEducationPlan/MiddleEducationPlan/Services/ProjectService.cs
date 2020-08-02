@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage.Table;
 using MiddleEducationPlan.Models.Project;
 using MiddleEducationPlan.TableEntities;
@@ -31,6 +32,18 @@ namespace MiddleEducationPlan.Services
                 RowKey = id.ToString(),
                 Name = project.Name
             }, this.table);
+        }
+
+        public async Task<TableResult> UpdateProjectAsync(Guid id, UpdateProjectModel project)
+        {
+            var projectEntity = (ProjectEntity) await this.GetEntityById(id, this.table);
+
+            if (projectEntity == null)
+                return null;
+
+            projectEntity.Name = project.Name;
+
+            return await this.UpdateEntityAsync(projectEntity, this.table);
         }
     }
 }

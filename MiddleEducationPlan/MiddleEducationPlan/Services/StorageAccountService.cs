@@ -37,21 +37,19 @@ namespace MiddleEducationPlan.Services
             return await table.ExecuteAsync(insertOperation);
         }
 
-        public async Task<TableResult> UpdateProjectAsync(UpdateProjectModel project)
+        public async Task<TableResult> UpdateEntityAsync(TableEntity entity, CloudTable table)
         {
-            var table = this.tableClient.GetTableReference("Project");
-            await table.CreateIfNotExistsAsync();
-
-            var query = new TableQuery<ProjectEntity>()
-                .Where(TableQuery.GenerateFilterConditionForInt("Code", QueryComparisons.Equal, project.Code));
-
-            var projectEntity = (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
-
-            projectEntity.Name = project.Name;
-
-            var insertOrReplaceOperation = TableOperation.InsertOrReplace(projectEntity);
+            var insertOrReplaceOperation = TableOperation.InsertOrReplace(entity);
 
             return await table.ExecuteAsync(insertOrReplaceOperation);
+        }
+
+        public async Task<TableEntity> GetEntityById(Guid id, CloudTable table)
+        {
+            var query = new TableQuery<ProjectEntity>()
+                .Where(TableQuery.GenerateFilterConditionForGuid("Id", QueryComparisons.Equal, id));
+
+            return (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
         }
 
         public async Task<TableResult> DeleteProjectAsync(int projectCode)

@@ -45,14 +45,18 @@ namespace MiddleEducationPlan.Controllers
             return Ok(await this.projectService.AddProjectAsync(project));
         }
 
-        //[HttpPut]
-        //public async Task<ActionResult> Update([FromBody] UpdateProjectModel project)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState.GetErrorMessages());
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update(Guid id, [FromBody] UpdateProjectModel project)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState.GetErrorMessages());
 
-        //    return Ok(await this.storageAccountService.UpdateProjectAsync(project));
-        //}
+            var result = await this.projectService.UpdateProjectAsync(id, project);
+
+            if (result == null)
+                return NotFound();
+            return Ok(result);
+        }
 
         //[HttpDelete("{code}")]
         //public async Task<ActionResult> Delete(int code)
