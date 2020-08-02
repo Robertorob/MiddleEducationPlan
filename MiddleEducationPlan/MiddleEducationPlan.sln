@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiddleEducationPlan.Web", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiddleEducationPlan.Common", "MiddleEducationPlan.Common\MiddleEducationPlan.Common.csproj", "{8FC3F3FE-65B8-4CC4-8C39-AB1E7BC6B869}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiddleEducationPlan.BusinessLogic", "MiddleEducationPlan.BusinessLogic\MiddleEducationPlan.BusinessLogic.csproj", "{44F6D3A3-0098-42DB-8122-8FC7BFF02B75}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{8FC3F3FE-65B8-4CC4-8C39-AB1E7BC6B869}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FC3F3FE-65B8-4CC4-8C39-AB1E7BC6B869}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FC3F3FE-65B8-4CC4-8C39-AB1E7BC6B869}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44F6D3A3-0098-42DB-8122-8FC7BFF02B75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44F6D3A3-0098-42DB-8122-8FC7BFF02B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44F6D3A3-0098-42DB-8122-8FC7BFF02B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44F6D3A3-0098-42DB-8122-8FC7BFF02B75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

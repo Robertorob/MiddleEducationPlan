@@ -1,9 +1,8 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage.Table;
-using MiddleEducationPlan.Models.Project;
-using MiddleEducationPlan.TableEntities;
+using MiddleEducationPlan.BusinessLogic.Models.Project;
+using MiddleEducationPlan.BusinessLogic.TableEntities;
+using MiddleEducationPlan.Common.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;

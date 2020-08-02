@@ -4,9 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MiddleEducationPlan.BusinessLogic.Models.Project;
 using MiddleEducationPlan.Extensions;
-using MiddleEducationPlan.Models;
-using MiddleEducationPlan.Models.Project;
 using MiddleEducationPlan.Services;
 
 namespace MiddleEducationPlan.Controllers

@@ -1,11 +1,7 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
-using MiddleEducationPlan.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace MiddleEducationPlan.TableEntities
+namespace MiddleEducationPlan.BusinessLogic.TableEntities
 {
     public class ProjectEntity : TableEntity
     {

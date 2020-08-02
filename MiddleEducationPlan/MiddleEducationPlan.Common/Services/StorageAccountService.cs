@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MiddleEducationPlan.Services
+namespace MiddleEducationPlan.Common.Services
 {
     public abstract class StorageAccountService<TEntity> where TEntity : TableEntity, new()
     {

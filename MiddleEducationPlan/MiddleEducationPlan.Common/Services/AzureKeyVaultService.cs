@@ -1,12 +1,8 @@
 ﻿using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace MiddleEducationPlan.Services
+namespace MiddleEducationPlan.Common.Services
 {
     public class AzureKeyVaultService
     {
@@ -23,7 +19,7 @@ namespace MiddleEducationPlan.Services
         {
             var keyVaultSection = this.configuration.GetSection("KeyVault");
             string keyVaultName = keyVaultSection["Name"];
-            string secretKey = keyVaultSection.GetSection("SecretKeys")[connectionStringName]; ;
+            string secretKey = keyVaultSection.GetSection("SecretKeys")[connectionStringName];
 #if RELEASE
             
             string connectionString = this.keyVaultClient.GetSecretAsync($"https://{keyVaultName}.vault.azure.net/secrets/{secretKey}").Result.Value;
