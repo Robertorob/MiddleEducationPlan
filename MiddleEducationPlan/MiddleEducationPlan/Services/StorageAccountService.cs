@@ -11,19 +11,20 @@ using System.Threading.Tasks;
 
 namespace MiddleEducationPlan.Services
 {
-    public abstract class StorageAccountService
+    public abstract class StorageAccountService<TEntity> where TEntity : TableEntity, new()
     {
         private readonly IConfiguration configuration;
         private readonly AzureKeyVaultService keyVaultServie;
         private readonly string storageAccountConnectionString;
         private readonly CloudStorageAccount storageAccount;
         protected readonly CloudTableClient tableClient;
+        private const string STORAGE_ACCOUNT_CONNECTION_STRING_KEY = "StorageAccountConnectionString";
 
         public StorageAccountService(IConfiguration configuration, AzureKeyVaultService keyVaultServie)
         {
             this.configuration = configuration;
             this.keyVaultServie = keyVaultServie;
-            this.storageAccountConnectionString = this.keyVaultServie.GetConnectionString("StorageAccountConnectionString");
+            this.storageAccountConnectionString = this.keyVaultServie.GetConnectionString(STORAGE_ACCOUNT_CONNECTION_STRING_KEY);
             this.storageAccount = CloudStorageAccount.Parse(this.storageAccountConnectionString);
             this.tableClient = this.storageAccount.CreateCloudTableClient();
         }
@@ -44,9 +45,9 @@ namespace MiddleEducationPlan.Services
             return await table.ExecuteAsync(insertOrReplaceOperation);
         }
 
-        public async Task<T> GetEntityById<T>(Guid id, CloudTable table) where T : TableEntity, new()
+        public async Task<TEntity> GetEntityById(Guid id, CloudTable table)
         {
-            var query = new TableQuery<T>()
+            var query = new TableQuery<TEntity>()
                 .Where(TableQuery.GenerateFilterConditionForGuid("Id", QueryComparisons.Equal, id));
 
             return (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
@@ -65,31 +66,6 @@ namespace MiddleEducationPlan.Services
             var deleteOperation = TableOperation.Delete(projectEntity);
 
             return await table.ExecuteAsync(deleteOperation);
-        }
-
-        public async Task<List<ProjectEntity>> GetProjectsAsync(GetProjectModel filter)
-        {
-            var table = this.tableClient.GetTableReference("Project");
-            await table.CreateIfNotExistsAsync();
-
-            var query = new TableQuery<ProjectEntity>();
-
-            var projects = await table.ExecuteQuerySegmentedAsync(query, null);
-
-            return projects.ToList();
-        }
-
-        protected async Task<int> GetProjectCodeAndIncrementAsync(CloudTable table)
-        {
-            var query = new TableQuery<ProjectEntity>()
-                    .Where(TableQuery.GenerateFilterCondition("RowKey", QueryComparisons.Equal, "0"));
-            var idEntity = (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
-            idEntity.Code++;
-            var incrementCode = TableOperation.InsertOrReplace(idEntity);
-
-            await table.ExecuteAsync(incrementCode);
-
-            return idEntity.Code;
         }
     }
 }

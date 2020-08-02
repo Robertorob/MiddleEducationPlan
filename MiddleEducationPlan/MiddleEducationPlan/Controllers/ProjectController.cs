@@ -24,11 +24,16 @@ namespace MiddleEducationPlan.Controllers
             this.projectService = projectService;
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult> GetProjectsAsync([FromQuery] GetProjectModel filter)
-        //{
-        //    return Ok(await this.storageAccountService.GetProjectsAsync(filter));
-        //}
+        [HttpGet]
+        public async Task<ActionResult> GetProjectsAsync([FromQuery] GetProjectModel filter)
+        {
+            var result = await this.projectService.GetProjectsAsync(filter);
+
+            if (result.Count == 0)
+                return NotFound();
+
+            return Ok(result);
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(Guid id)
