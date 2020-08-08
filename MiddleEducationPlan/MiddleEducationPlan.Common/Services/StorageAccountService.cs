@@ -15,7 +15,7 @@ namespace MiddleEducationPlan.Common.Services
         protected readonly CloudTableClient tableClient;
         private const string STORAGE_ACCOUNT_CONNECTION_STRING_KEY = "StorageAccountConnectionString";
 
-        public StorageAccountService(IConfiguration configuration, AzureKeyVaultService keyVaultServie)
+        public StorageAccountService(AzureKeyVaultService keyVaultServie)
         {
             this.keyVaultServie = keyVaultServie;
             this.storageAccountConnectionString = this.keyVaultServie.GetConnectionString(STORAGE_ACCOUNT_CONNECTION_STRING_KEY);
@@ -23,7 +23,7 @@ namespace MiddleEducationPlan.Common.Services
             this.tableClient = this.storageAccount.CreateCloudTableClient();
         }
 
-        public async Task<TableResult> AddEntityAsync(TableEntity entity, CloudTable table)
+        protected async Task<TableResult> AddEntityAsync(TableEntity entity, CloudTable table)
         {
             await table.CreateIfNotExistsAsync();
 
@@ -32,14 +32,14 @@ namespace MiddleEducationPlan.Common.Services
             return await table.ExecuteAsync(insertOperation);
         }
 
-        public async Task<TableResult> UpdateEntityAsync(TableEntity entity, CloudTable table)
+        protected async Task<TableResult> UpdateEntityAsync(TableEntity entity, CloudTable table)
         {
             var insertOrReplaceOperation = TableOperation.InsertOrReplace(entity);
 
             return await table.ExecuteAsync(insertOrReplaceOperation);
         }
 
-        public async Task<TEntity> GetEntityById(Guid id, CloudTable table)
+        protected async Task<TEntity> GetEntityById(Guid id, CloudTable table)
         {
             var query = new TableQuery<TEntity>()
                 .Where(TableQuery.GenerateFilterConditionForGuid("Id", QueryComparisons.Equal, id));
@@ -47,7 +47,7 @@ namespace MiddleEducationPlan.Common.Services
             return (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
         }
 
-        public async Task<TableResult> DeleteEntityByIdAsync(Guid id, CloudTable table)
+        protected async Task<TableResult> DeleteEntityByIdAsync(Guid id, CloudTable table)
         {
             var query = new TableQuery<TEntity>()
                 .Where(TableQuery.GenerateFilterConditionForGuid("Id", QueryComparisons.Equal, id));
