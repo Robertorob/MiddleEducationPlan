@@ -15,7 +15,7 @@ namespace MiddleEducationPlan.Services
         private const string ENTITY_NAME = "Task";
         private readonly CloudTable table;
 
-        public TaskService(IConfiguration configuration, AzureKeyVaultService keyVaultServie) : base(configuration, keyVaultServie) 
+        public TaskService(AzureKeyVaultService keyVaultServie) : base(keyVaultServie) 
         { 
             this.table = this.tableClient.GetTableReference(TaskService.ENTITY_NAME);
         }

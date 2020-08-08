@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage.Table;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
+using MiddleEducationPlan.BusinessLogic.Models.Task;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
 using MiddleEducationPlan.Common.Services;
 using System;
@@ -15,10 +16,12 @@ namespace MiddleEducationPlan.Services
     {
         private const string ENTITY_NAME = "Project";
         private readonly CloudTable table;
+        private readonly TaskService taskService;
 
-        public ProjectService(IConfiguration configuration, AzureKeyVaultService keyVaultServie) : base(configuration, keyVaultServie) 
+        public ProjectService(AzureKeyVaultService keyVaultServie, TaskService taskService) : base(keyVaultServie) 
         { 
             this.table = this.tableClient.GetTableReference(ProjectService.ENTITY_NAME);
+            this.taskService = taskService;
         }
 
         public async Task<TableResult> AddProjectAsync(AddProjectModel project)
@@ -49,7 +52,16 @@ namespace MiddleEducationPlan.Services
 
         public async Task<ProjectEntity> GetProjectByIdAsync(Guid id)
         {
-            return await GetEntityById(id, this.table);
+            var project = await GetEntityById(id, this.table);
+            var tasks = await this.taskService.GetTasksAsync(new GetTaskModel
+            {
+                ProjectId = id
+            });
+
+            if(project != null)
+                project.Tasks = tasks;
+
+            return project;
         }
 
         public async Task<List<ProjectEntity>> GetProjectsAsync(GetProjectModel filter)
@@ -61,6 +73,14 @@ namespace MiddleEducationPlan.Services
                 query = query.Where(combined);
 
             var projects = await table.ExecuteQuerySegmentedAsync(query, null);
+
+            if (filter.IncludeTasks)
+            {
+                foreach (var project in projects)
+                {
+                    project.Tasks = await this.taskService.GetTasksAsync(new GetTaskModel { ProjectId = project.Id });
+                } 
+            }
 
             return projects.ToList();
         }

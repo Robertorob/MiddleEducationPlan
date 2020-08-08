@@ -9,5 +9,6 @@ namespace MiddleEducationPlan.BusinessLogic.Models.Project
     {
         public int? Code { get; set; }
         public string Name { get; set; }
+        public bool IncludeTasks { get; set; }
     }
 }

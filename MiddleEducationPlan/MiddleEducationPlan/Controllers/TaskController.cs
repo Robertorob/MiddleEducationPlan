@@ -14,11 +14,13 @@ namespace MiddleEducationPlan.Controllers
     {
         private readonly ILogger<TaskController> logger;
         private readonly TaskService taskService;
+        private readonly ProjectService projectService;
 
-        public TaskController(ILogger<TaskController> logger, TaskService taskService)
+        public TaskController(ILogger<TaskController> logger, TaskService taskService, ProjectService projectService)
         {
             this.logger = logger;
             this.taskService = taskService;
+            this.projectService = projectService;
         }
 
         [HttpGet]
@@ -48,6 +50,10 @@ namespace MiddleEducationPlan.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
+
+            var project = await this.projectService.GetProjectByIdAsync(task.ProjectId ?? new Guid());
+            if (project == null)
+                return BadRequest($"Project with ID \"{task.ProjectId}\" does not exist.");
 
             return Ok((await this.taskService.AddTaskAsync(task)).Result);
         }
