@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MiddleEducationPlan.Models
+namespace MiddleEducationPlan.BusinessLogic.Models.Task
 {
-    public class Task
+    public class GetTaskModel
     {
-        public int Id { get; set; }
+        public Guid? ProjectId { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace MiddleEducationPlan
         {
             services.AddSingleton<AzureKeyVaultService>();
             services.AddSingleton<ProjectService>();
-
+            services.AddSingleton<TaskService>();
 
             services.AddControllers();
 
