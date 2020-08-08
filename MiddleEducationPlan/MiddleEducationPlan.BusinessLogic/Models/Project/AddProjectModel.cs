@@ -12,6 +12,5 @@ namespace MiddleEducationPlan.BusinessLogic.Models.Project
     {
         [Required]
         public string Name { get; set; }
-        public IEnumerable<AddTaskModel> Tasks { get; set; }
     }
 }
