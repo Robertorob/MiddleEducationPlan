@@ -9,7 +9,6 @@ namespace MiddleEducationPlan.Common.Services
 {
     public abstract class StorageAccountService<TEntity> where TEntity : TableEntity, new()
     {
-        private readonly IConfiguration configuration;
         private readonly AzureKeyVaultService keyVaultServie;
         private readonly string storageAccountConnectionString;
         private readonly CloudStorageAccount storageAccount;
@@ -18,7 +17,6 @@ namespace MiddleEducationPlan.Common.Services
 
         public StorageAccountService(IConfiguration configuration, AzureKeyVaultService keyVaultServie)
         {
-            this.configuration = configuration;
             this.keyVaultServie = keyVaultServie;
             this.storageAccountConnectionString = this.keyVaultServie.GetConnectionString(STORAGE_ACCOUNT_CONNECTION_STRING_KEY);
             this.storageAccount = CloudStorageAccount.Parse(this.storageAccountConnectionString);

@@ -51,7 +51,7 @@ namespace MiddleEducationPlan.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            return Ok(await this.projectService.AddProjectAsync(project));
+            return Ok((await this.projectService.AddProjectAsync(project)).Result);
         }
 
         [HttpPut("{id}")]
@@ -65,7 +65,7 @@ namespace MiddleEducationPlan.Controllers
             if (result == null)
                 return NotFound();
 
-            return Ok(result);
+            return Ok(result.Result);
         }
 
         [HttpDelete("{id}")]
@@ -76,7 +76,7 @@ namespace MiddleEducationPlan.Controllers
             if (result == null)
                 return NotFound();
 
-            return Ok(await this.projectService.DeleteProjectByIdAsync(id));
+            return Ok((await this.projectService.DeleteProjectByIdAsync(id)).Result);
         }
     }
 }

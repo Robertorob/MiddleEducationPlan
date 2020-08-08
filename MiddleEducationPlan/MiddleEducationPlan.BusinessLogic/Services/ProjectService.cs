@@ -29,7 +29,7 @@ namespace MiddleEducationPlan.Services
             { 
                 Id = id,
                 Code = code,
-                PartitionKey = code.ToString(),
+                PartitionKey = id.ToString(),
                 RowKey = id.ToString(),
                 Name = project.Name
             }, this.table);
