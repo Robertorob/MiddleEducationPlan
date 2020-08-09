@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
 using MiddleEducationPlan.Extensions;
 using MiddleEducationPlan.Services;
+using MiddleEducationPlan.Web.Exceptions;
 
-namespace MiddleEducationPlan.Controllers
+namespace MiddleEducationPlan.Web.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

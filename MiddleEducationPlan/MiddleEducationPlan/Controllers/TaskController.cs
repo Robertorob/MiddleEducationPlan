@@ -6,7 +6,7 @@ using MiddleEducationPlan.BusinessLogic.Models.Task;
 using MiddleEducationPlan.Extensions;
 using MiddleEducationPlan.Services;
 
-namespace MiddleEducationPlan.Controllers
+namespace MiddleEducationPlan.Web.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
