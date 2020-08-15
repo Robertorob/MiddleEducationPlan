@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MiddleEducationPlan.BusinessLogic.Models.Project
+﻿namespace MiddleEducationPlan.BusinessLogic.Models.Project
 {
     public class GetProjectModel
     {

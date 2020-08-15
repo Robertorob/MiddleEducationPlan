@@ -5,8 +5,6 @@ using Microsoft.Extensions.Logging;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
 using MiddleEducationPlan.Extensions;
-using MiddleEducationPlan.Services;
-using MiddleEducationPlan.Web.Exceptions;
 
 namespace MiddleEducationPlan.Web.Controllers
 {
