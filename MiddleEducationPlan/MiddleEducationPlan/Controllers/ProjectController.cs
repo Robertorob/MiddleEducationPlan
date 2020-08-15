@@ -13,12 +13,10 @@ namespace MiddleEducationPlan.Web.Controllers
     [Route("api/[controller]")]
     public class ProjectController : ControllerBase
     {
-        private readonly ILogger<ProjectController> logger;
         private readonly IProjectService projectService;
 
-        public ProjectController(ILogger<ProjectController> logger, IProjectService projectService)
+        public ProjectController(IProjectService projectService)
         {
-            this.logger = logger;
             this.projectService = projectService;
         }
 

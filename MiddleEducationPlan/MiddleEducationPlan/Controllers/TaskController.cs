@@ -13,13 +13,11 @@ namespace MiddleEducationPlan.Web.Controllers
     [Route("api/[controller]")]
     public class TaskController : ControllerBase
     {
-        private readonly ILogger<TaskController> logger;
         private readonly ITaskService taskService;
         private readonly IProjectService projectService;
 
-        public TaskController(ILogger<TaskController> logger, ITaskService taskService, IProjectService projectService)
+        public TaskController(ITaskService taskService, IProjectService projectService)
         {
-            this.logger = logger;
             this.taskService = taskService;
             this.projectService = projectService;
         }
