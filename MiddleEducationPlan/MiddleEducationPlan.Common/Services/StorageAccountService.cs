@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
+using MiddleEducationPlan.Common.Interfaces;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,13 +10,13 @@ namespace MiddleEducationPlan.Common.Services
 {
     public abstract class StorageAccountService<TEntity> where TEntity : TableEntity, new()
     {
-        private readonly AzureKeyVaultService keyVaultServie;
+        private readonly IAzureKeyVaultService keyVaultServie;
         private readonly string storageAccountConnectionString;
         private readonly CloudStorageAccount storageAccount;
         protected readonly CloudTableClient tableClient;
         private const string STORAGE_ACCOUNT_CONNECTION_STRING_KEY = "StorageAccountConnectionString";
 
-        public StorageAccountService(AzureKeyVaultService keyVaultServie)
+        public StorageAccountService(IAzureKeyVaultService keyVaultServie)
         {
             this.keyVaultServie = keyVaultServie;
             this.storageAccountConnectionString = this.keyVaultServie.GetConnectionString(STORAGE_ACCOUNT_CONNECTION_STRING_KEY);

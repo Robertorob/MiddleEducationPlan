@@ -1,10 +1,11 @@
 ﻿using Microsoft.Azure.KeyVault;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
+using MiddleEducationPlan.Common.Interfaces;
 
 namespace MiddleEducationPlan.Common.Services
 {
-    public class AzureKeyVaultService
+    public class AzureKeyVaultService : IAzureKeyVaultService
     {
         private readonly IConfiguration configuration;
         private readonly KeyVaultClient keyVaultClient;

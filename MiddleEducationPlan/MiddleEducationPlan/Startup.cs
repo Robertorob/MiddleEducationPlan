@@ -11,6 +11,7 @@ using Azure.Storage.Blobs;
 using Azure.Core.Extensions;
 using MiddleEducationPlan.Services;
 using MiddleEducationPlan.Common.Services;
+using MiddleEducationPlan.Common.Interfaces;
 
 namespace MiddleEducationPlan.Web
 {
@@ -26,7 +27,7 @@ namespace MiddleEducationPlan.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<AzureKeyVaultService>();
+            services.AddSingleton<IAzureKeyVaultService, AzureKeyVaultService>();
             services.AddSingleton<ProjectService>();
             services.AddSingleton<TaskService>();
 

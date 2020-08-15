@@ -3,6 +3,7 @@ using Microsoft.WindowsAzure.Storage.Table;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
 using MiddleEducationPlan.BusinessLogic.Models.Task;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
+using MiddleEducationPlan.Common.Interfaces;
 using MiddleEducationPlan.Common.Services;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace MiddleEducationPlan.Services
         private readonly CloudTable table;
         private readonly TaskService taskService;
 
-        public ProjectService(AzureKeyVaultService keyVaultServie, TaskService taskService) : base(keyVaultServie) 
+        public ProjectService(IAzureKeyVaultService keyVaultServie, TaskService taskService) : base(keyVaultServie) 
         { 
             this.table = this.tableClient.GetTableReference(ProjectService.ENTITY_NAME);
             this.taskService = taskService;
