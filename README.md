@@ -27,5 +27,6 @@
 | 8/8/2020	17:55 | 6. Add CRUD functionality for Task	| 6h |
 | 8/8/2020	19:00 | 7. Add error handling and logging | 1h |
 | 8/15/2020	14:25 | 7. Add error handling and logging | 2h |
+| 8/15/2020	16:28 | 7. Add error handling and logging | 1h |
 
 
