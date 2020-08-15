@@ -8,10 +8,10 @@ using Microsoft.Extensions.Azure;
 using Azure.Storage.Queues;
 using Azure.Storage.Blobs;
 using Azure.Core.Extensions;
-using MiddleEducationPlan.Services;
 using MiddleEducationPlan.Common.Services;
 using MiddleEducationPlan.Common.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
+using MiddleEducationPlan.BusinessLogic.Services;
 
 namespace MiddleEducationPlan.Web
 {
@@ -29,7 +29,7 @@ namespace MiddleEducationPlan.Web
         {
             services.AddSingleton<IAzureKeyVaultService, AzureKeyVaultService>();
             services.AddSingleton<IProjectService, ProjectService>();
-            services.AddSingleton<TaskService>();
+            services.AddSingleton<ITaskService, TaskService>();
 
             services.AddControllers();
 

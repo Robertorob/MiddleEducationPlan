@@ -10,15 +10,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MiddleEducationPlan.Services
+namespace MiddleEducationPlan.BusinessLogic.Services
 {
     public class ProjectService : StorageAccountService<ProjectEntity>, IProjectService
     {
         private const string ENTITY_NAME = "Project";
         private readonly CloudTable table;
-        private readonly TaskService taskService;
+        private readonly ITaskService taskService;
 
-        public ProjectService(IAzureKeyVaultService keyVaultServie, TaskService taskService) : base(keyVaultServie) 
+        public ProjectService(IAzureKeyVaultService keyVaultServie, ITaskService taskService) : base(keyVaultServie) 
         { 
             this.table = this.tableClient.GetTableReference(ProjectService.ENTITY_NAME);
             this.taskService = taskService;
