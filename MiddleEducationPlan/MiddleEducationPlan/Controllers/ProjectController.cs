@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
 using MiddleEducationPlan.Extensions;
 using MiddleEducationPlan.Services;
@@ -14,9 +15,9 @@ namespace MiddleEducationPlan.Web.Controllers
     public class ProjectController : ControllerBase
     {
         private readonly ILogger<ProjectController> logger;
-        private readonly ProjectService projectService;
+        private readonly IProjectService projectService;
 
-        public ProjectController(ILogger<ProjectController> logger, ProjectService projectService)
+        public ProjectController(ILogger<ProjectController> logger, IProjectService projectService)
         {
             this.logger = logger;
             this.projectService = projectService;

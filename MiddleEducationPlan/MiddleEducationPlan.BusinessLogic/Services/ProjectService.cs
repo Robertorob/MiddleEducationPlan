@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.WindowsAzure.Storage.Table;
+using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
 using MiddleEducationPlan.BusinessLogic.Models.Task;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
@@ -8,12 +8,11 @@ using MiddleEducationPlan.Common.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace MiddleEducationPlan.Services
 {
-    public class ProjectService : StorageAccountService<ProjectEntity>
+    public class ProjectService : StorageAccountService<ProjectEntity>, IProjectService
     {
         private const string ENTITY_NAME = "Project";
         private readonly CloudTable table;

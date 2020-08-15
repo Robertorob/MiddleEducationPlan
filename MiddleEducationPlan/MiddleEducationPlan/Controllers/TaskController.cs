@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Task;
 using MiddleEducationPlan.Extensions;
 using MiddleEducationPlan.Services;
@@ -14,9 +15,9 @@ namespace MiddleEducationPlan.Web.Controllers
     {
         private readonly ILogger<TaskController> logger;
         private readonly TaskService taskService;
-        private readonly ProjectService projectService;
+        private readonly IProjectService projectService;
 
-        public TaskController(ILogger<TaskController> logger, TaskService taskService, ProjectService projectService)
+        public TaskController(ILogger<TaskController> logger, TaskService taskService, IProjectService projectService)
         {
             this.logger = logger;
             this.taskService = taskService;

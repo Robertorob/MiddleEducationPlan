@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Azure;
 using Azure.Storage.Queues;
 using Azure.Storage.Blobs;
@@ -12,6 +11,7 @@ using Azure.Core.Extensions;
 using MiddleEducationPlan.Services;
 using MiddleEducationPlan.Common.Services;
 using MiddleEducationPlan.Common.Interfaces;
+using MiddleEducationPlan.BusinessLogic.Interfaces;
 
 namespace MiddleEducationPlan.Web
 {
@@ -28,7 +28,7 @@ namespace MiddleEducationPlan.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IAzureKeyVaultService, AzureKeyVaultService>();
-            services.AddSingleton<ProjectService>();
+            services.AddSingleton<IProjectService, ProjectService>();
             services.AddSingleton<TaskService>();
 
             services.AddControllers();
