@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Task;
+using MiddleEducationPlan.BusinessLogic.TableEntities;
 using MiddleEducationPlan.Extensions;
 
 namespace MiddleEducationPlan.Web.Controllers
@@ -55,7 +56,9 @@ namespace MiddleEducationPlan.Web.Controllers
             if (project == null)
                 return BadRequest($"Project with ID \"{task.ProjectId}\" does not exist.");
 
-            return Ok((await this.taskService.AddTaskAsync(task)).Result);
+            var result = (await this.taskService.AddTaskAsync(task)).Result;
+
+            return Created($"{Constants.TaskBaseAddress}/{((TaskEntity)result).Id}", result);
         }
 
         [HttpPut("{id}")]

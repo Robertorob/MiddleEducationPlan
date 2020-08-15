@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
+using MiddleEducationPlan.BusinessLogic.TableEntities;
 using MiddleEducationPlan.Extensions;
 
 namespace MiddleEducationPlan.Web.Controllers
@@ -49,7 +50,9 @@ namespace MiddleEducationPlan.Web.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
 
-            return Ok((await this.projectService.AddProjectAsync(project)).Result);
+            var result = (await this.projectService.AddProjectAsync(project)).Result;
+
+            return Created($"{Constants.ProjectBaseAddress}/{((ProjectEntity) result).Id}", result);
         }
 
         [HttpPut("{id}")]
