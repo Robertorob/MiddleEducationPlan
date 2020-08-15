@@ -25,5 +25,6 @@
 | 8/2/2020	16:02 | 5. Add CRUD functionality for Project	| 2h |
 | 8/2/2020	18:31 | 5. Add CRUD functionality for Project	| 1h |
 | 8/8/2020	17:55 | 6. Add CRUD functionality for Task	| 6h |
+| 8/8/2020	19:00 | 7. Add error handling and logging | 1h |
 
 
