@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.WindowsAzure.Storage.Table;
+using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Task;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
 using MiddleEducationPlan.Common.Interfaces;
@@ -9,9 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MiddleEducationPlan.Services
+namespace MiddleEducationPlan.BusinessLogic.Services
 {
-    public class TaskService : StorageAccountService<TaskEntity>
+    public class TaskService : StorageAccountService<TaskEntity>, ITaskService
     {
         private const string ENTITY_NAME = "Task";
         private readonly CloudTable table;

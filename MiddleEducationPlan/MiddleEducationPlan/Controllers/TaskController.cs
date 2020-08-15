@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Task;
 using MiddleEducationPlan.Extensions;
-using MiddleEducationPlan.Services;
 
 namespace MiddleEducationPlan.Web.Controllers
 {
@@ -14,10 +13,10 @@ namespace MiddleEducationPlan.Web.Controllers
     public class TaskController : ControllerBase
     {
         private readonly ILogger<TaskController> logger;
-        private readonly TaskService taskService;
+        private readonly ITaskService taskService;
         private readonly IProjectService projectService;
 
-        public TaskController(ILogger<TaskController> logger, TaskService taskService, IProjectService projectService)
+        public TaskController(ILogger<TaskController> logger, ITaskService taskService, IProjectService projectService)
         {
             this.logger = logger;
             this.taskService = taskService;
