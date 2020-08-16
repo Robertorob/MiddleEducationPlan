@@ -1,8 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
-using MiddleEducationPlan.BusinessLogic.Services;
-using MiddleEducationPlan.Common.Services;
 using MiddleEducationPlan.Web.Controllers;
 using Moq;
 using NUnit.Framework;
@@ -10,7 +7,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace MiddleEducationPlan.UnitTests
+namespace MiddleEducationPlan.UnitTests.Project
 {
     public class ProjectController_GetAsync_UnitTests
     {
