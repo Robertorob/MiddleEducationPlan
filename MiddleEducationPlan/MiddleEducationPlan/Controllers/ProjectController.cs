@@ -32,7 +32,7 @@ namespace MiddleEducationPlan.Web.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(Guid id)
+        public async Task<ActionResult> GetAsync(Guid id)
         {
             var result = await this.projectService.GetProjectByIdAsync(id);
 

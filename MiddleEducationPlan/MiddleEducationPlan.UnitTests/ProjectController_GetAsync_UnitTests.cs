@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MiddleEducationPlan.UnitTests
 {
-    public class ProjectControllerUnitTests
+    public class ProjectController_GetAsync_UnitTests
     {
         private ProjectController projectController;
         private Guid projectEntityId;
@@ -23,37 +23,31 @@ namespace MiddleEducationPlan.UnitTests
             this.projectEntityId = Guid.NewGuid();
             var projectEntity = new BusinessLogic.TableEntities.ProjectEntity()
             {
-                Id = this.projectEntityId
+                Id = this.projectEntityId,
+                Name = "name"
             };
 
             var projectServiceMock = new Mock<IProjectService>();
+            projectServiceMock.Setup(f => f.GetProjectByIdAsync(this.projectEntityId)).Returns(Task.FromResult(projectEntity));
             projectServiceMock.Setup(f => f.GetProjectByIdAsync(this.projectEntityId)).Returns(Task.FromResult(projectEntity));
 
             this.projectController = new ProjectController(projectServiceMock.Object);
         }
 
         [Test]
-        public async Task Get_ExistingProject_Ok200()
+        public async Task GetAsync_ExistingProject_Ok200()
         {
-            var result = await this.projectController.Get(this.projectEntityId) as ObjectResult;
+            var result = await this.projectController.GetAsync(this.projectEntityId) as ObjectResult;
 
             Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.OK);
         }
 
         [Test]
-        public async Task Get_NonExistingProject_NotFound404()
+        public async Task GetAsync_NonExistingProject_NotFound404()
         {
-            var result = await this.projectController.Get(Guid.NewGuid()) as ObjectResult;
+            var result = await this.projectController.GetAsync(Guid.NewGuid()) as NotFoundResult;
 
             Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.NotFound);
-        }
-
-        [Test]
-        public async Task Get_ExistingProjectByName_Ok200()
-        {
-            var result = await this.projectController.Get(this.projectEntityId) as ObjectResult;
-
-            Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.OK);
         }
     }
 }
