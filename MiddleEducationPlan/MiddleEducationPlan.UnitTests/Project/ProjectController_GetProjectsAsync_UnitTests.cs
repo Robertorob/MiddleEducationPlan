@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
-using MiddleEducationPlan.BusinessLogic.Services;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
-using MiddleEducationPlan.Common.Services;
 using MiddleEducationPlan.Web.Controllers;
 using Moq;
 using NUnit.Framework;
