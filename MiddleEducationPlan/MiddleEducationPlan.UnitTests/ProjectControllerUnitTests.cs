@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MiddleEducationPlan.UnitTests
 {
-    public class Tests
+    public class ProjectControllerUnitTests
     {
         private ProjectController projectController;
         private Guid projectEntityId;
@@ -34,6 +34,22 @@ namespace MiddleEducationPlan.UnitTests
 
         [Test]
         public async Task Get_ExistingProject_Ok200()
+        {
+            var result = await this.projectController.Get(this.projectEntityId) as ObjectResult;
+
+            Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.OK);
+        }
+
+        [Test]
+        public async Task Get_NonExistingProject_NotFound404()
+        {
+            var result = await this.projectController.Get(Guid.NewGuid()) as ObjectResult;
+
+            Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.NotFound);
+        }
+
+        [Test]
+        public async Task Get_ExistingProjectByName_Ok200()
         {
             var result = await this.projectController.Get(this.projectEntityId) as ObjectResult;
 
