@@ -11,7 +11,7 @@
 | 6 | Add CRUD functionality for Task | 8h |
 | 7 | Add error handling and logging | 8h |
 | 8 | Add Swagger | 4h |
-| 9 | Add unit tests | 4h |
+| 9 | Add unit tests | 12h |
 
 ## Timesheet
 | Datetime | Task Description | Spent |
@@ -29,5 +29,6 @@
 | 8/15/2020	14:25 | 7. Add error handling and logging | 2h |
 | 8/15/2020	16:28 | 7. Add error handling and logging | 1h |
 | 8/15/2020	17:28 | 9. Add unit tests | 1h |
+| 8/16/2020	18:00 | 9. Add unit tests | 2h |
 
 
