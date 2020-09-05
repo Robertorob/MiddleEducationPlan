@@ -33,6 +33,24 @@ namespace MiddleEducationPlan.UnitTests.Project.Mock
 
         public async override Task<TableResult> ExecuteAsync(TableOperation operation)
         {
+            if(operation.OperationType == TableOperationType.InsertOrReplace)
+            {
+                return await Task.FromResult(new TableResult
+                {
+                    Result = operation.Entity,
+                    HttpStatusCode = 200
+                });
+            }
+
+            if (operation.OperationType == TableOperationType.Insert)
+            {
+                return await Task.FromResult(new TableResult
+                {
+                    Result = operation.Entity,
+                    HttpStatusCode = 201
+                });
+            }
+
             return await Task.FromResult(new TableResult
             {
                 Result = new object(),
@@ -67,6 +85,14 @@ namespace MiddleEducationPlan.UnitTests.Project.Mock
                         this.projects.Where(f => f.Code == code).ToList()
                     }) as TableQuerySegment<TEntity>;
                 }
+                if(queryString.Contains("RowKey eq '0'"))
+                {
+                    int maxCode = this.projects.Max(f => f.Code);
+                    return ctor.Invoke(new object[]
+                    {
+                        this.projects.Where(f => f.Code == maxCode).ToList()
+                    }) as TableQuerySegment<TEntity>;
+                }
             }
             else
             {
@@ -74,6 +100,11 @@ namespace MiddleEducationPlan.UnitTests.Project.Mock
             }
 
             return await Task.FromResult(ctor.Invoke(new object[] { new List<ProjectEntity>() { } }) as TableQuerySegment<TEntity>);
+        }
+
+        public async override Task<bool> CreateIfNotExistsAsync()
+        {
+            return await Task.FromResult(true);
         }
     }
 }

@@ -42,7 +42,7 @@ namespace MiddleEducationPlan.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Add([FromBody] AddProjectModel project)
+        public async Task<ActionResult> AddAsync([FromBody] AddProjectModel project)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
@@ -53,7 +53,7 @@ namespace MiddleEducationPlan.Web.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(Guid id, [FromBody] UpdateProjectModel project)
+        public async Task<ActionResult> UpdateAsync(Guid id, [FromBody] UpdateProjectModel project)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
@@ -67,7 +67,7 @@ namespace MiddleEducationPlan.Web.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
             var result = await this.projectService.GetProjectByIdAsync(id);
 

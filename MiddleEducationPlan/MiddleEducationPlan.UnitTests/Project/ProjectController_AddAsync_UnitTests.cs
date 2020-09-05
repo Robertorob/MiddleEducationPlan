@@ -1,25 +1,37 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.WindowsAzure.Storage.Table;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
+using MiddleEducationPlan.BusinessLogic.Models.Project;
 using MiddleEducationPlan.BusinessLogic.Services;
+using MiddleEducationPlan.BusinessLogic.TableEntities;
 using MiddleEducationPlan.Common.Interfaces;
 using MiddleEducationPlan.UnitTests.Project.Mock;
 using MiddleEducationPlan.Web.Controllers;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace MiddleEducationPlan.UnitTests.Project
-{
-    public class ProjectController_GetAsync_UnitTests
+{   
+    public class ProjectController_AddAsync_UnitTests
     {
         private ProjectController projectController;
         private MockProjectCloudTableClient mockProjectCloudTableClient;
+        private AddProjectModel addProjectModel;
+        private AddProjectModel addEmptyNameProject;
 
         [SetUp]
         public void Setup()
         {
+            this.addProjectModel = new AddProjectModel
+            {
+                Name = "add project"
+            };
+            this.addEmptyNameProject = new AddProjectModel();
+
             var taskServiceMock = new Mock<ITaskService>();
 
             this.mockProjectCloudTableClient = new MockProjectCloudTableClient(new Uri("https://educationplanstorageacc.table.core.windows.net/"),
@@ -34,21 +46,21 @@ namespace MiddleEducationPlan.UnitTests.Project
         }
 
         [Test]
-        public async Task GetAsync_ExistingProject_Ok200()
+        public async Task AddAsync_ValidProject_Ok200()
         {
-            var result = await this.projectController.GetAsync(this.mockProjectCloudTableClient.mockProjectCloudTable.projects[0].Id) as ObjectResult;
+            var result = await this.projectController.AddAsync(this.addProjectModel) as ObjectResult;
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.OK);
+            Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.Created);
         }
 
         [Test]
-        public async Task GetAsync_NonExistingProject_NotFound404()
+        public async Task AddAsync_EmptyName_BadRequest()
         {
-            var result = await this.projectController.GetAsync(Guid.NewGuid()) as NotFoundResult;
+            var result = await this.projectController.AddAsync(this.addEmptyNameProject) as ObjectResult;
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.NotFound);
+            Assert.AreEqual(result.StatusCode, (int)HttpStatusCode.BadRequest);
         }
     }
 }
