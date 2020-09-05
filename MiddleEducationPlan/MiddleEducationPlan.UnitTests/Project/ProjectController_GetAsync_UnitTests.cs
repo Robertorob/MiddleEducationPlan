@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
+using MiddleEducationPlan.BusinessLogic.Services;
+using MiddleEducationPlan.Common.Interfaces;
 using MiddleEducationPlan.Web.Controllers;
 using Moq;
 using NUnit.Framework;
@@ -24,11 +26,16 @@ namespace MiddleEducationPlan.UnitTests.Project
                 Name = "name"
             };
 
-            var projectServiceMock = new Mock<IProjectService>();
-            projectServiceMock.Setup(f => f.GetProjectByIdAsync(this.projectEntityId)).Returns(Task.FromResult(projectEntity));
-            projectServiceMock.Setup(f => f.GetProjectByIdAsync(this.projectEntityId)).Returns(Task.FromResult(projectEntity));
+            var keyVaultMock = new Mock<ICloudTableClientFactory>();
+            var taskServiceMock = new Mock<ITaskService>();
 
-            this.projectController = new ProjectController(projectServiceMock.Object);
+            var projectService = new ProjectService(taskServiceMock.Object, keyVaultMock.Object);
+
+            //var projectServiceMock = new Mock<IProjectService>();
+            //projectServiceMock.Setup(f => f.GetProjectByIdAsync(this.projectEntityId)).Returns(Task.FromResult(projectEntity));
+            //projectServiceMock.Setup(f => f.GetProjectByIdAsync(this.projectEntityId)).Returns(Task.FromResult(projectEntity));
+
+            this.projectController = new ProjectController(projectService);
         }
 
         [Test]

@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Table;
+﻿using Microsoft.WindowsAzure.Storage.Table;
 using MiddleEducationPlan.Common.Interfaces;
 using System;
 using System.Linq;
@@ -8,56 +6,47 @@ using System.Threading.Tasks;
 
 namespace MiddleEducationPlan.Common.Services
 {
-    public abstract class StorageAccountService<TEntity> where TEntity : TableEntity, new()
+    public class StorageAccountService<TEntity> where TEntity : TableEntity, new()
     {
-        private readonly IAzureKeyVaultService keyVaultServie;
-        private readonly string storageAccountConnectionString;
-        private readonly CloudStorageAccount storageAccount;
-        protected readonly CloudTableClient tableClient;
-        private const string STORAGE_ACCOUNT_CONNECTION_STRING_KEY = "StorageAccountConnectionString";
+        protected readonly CloudTable cloudTable;
 
-        public StorageAccountService(IAzureKeyVaultService keyVaultServie)
+        public StorageAccountService(CloudTable cloudTable)
         {
-            this.keyVaultServie = keyVaultServie;
-            this.storageAccountConnectionString = this.keyVaultServie.GetConnectionString(STORAGE_ACCOUNT_CONNECTION_STRING_KEY);
-            this.storageAccount = CloudStorageAccount.Parse(this.storageAccountConnectionString);
-            this.tableClient = this.storageAccount.CreateCloudTableClient();
+            this.cloudTable = cloudTable;
         }
 
-        protected async Task<TableResult> AddEntityAsync(TableEntity entity, CloudTable table)
+        public async Task<TableResult> AddEntityAsync(TableEntity entity)
         {
-            await table.CreateIfNotExistsAsync();
-
             var insertOperation = TableOperation.Insert(entity);
 
-            return await table.ExecuteAsync(insertOperation);
+            return await this.cloudTable.ExecuteAsync(insertOperation);
         }
 
-        protected async Task<TableResult> UpdateEntityAsync(TableEntity entity, CloudTable table)
+        public async Task<TableResult> UpdateEntityAsync(TableEntity entity)
         {
             var insertOrReplaceOperation = TableOperation.InsertOrReplace(entity);
 
-            return await table.ExecuteAsync(insertOrReplaceOperation);
+            return await this.cloudTable.ExecuteAsync(insertOrReplaceOperation);
         }
 
-        protected async Task<TEntity> GetEntityById(Guid id, CloudTable table)
+        public async Task<TEntity> GetEntityById(Guid id)
         {
             var query = new TableQuery<TEntity>()
                 .Where(TableQuery.GenerateFilterConditionForGuid("Id", QueryComparisons.Equal, id));
 
-            return (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
+            return (await this.cloudTable.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
         }
 
-        protected async Task<TableResult> DeleteEntityByIdAsync(Guid id, CloudTable table)
+        public async Task<TableResult> DeleteEntityByIdAsync(Guid id)
         {
             var query = new TableQuery<TEntity>()
                 .Where(TableQuery.GenerateFilterConditionForGuid("Id", QueryComparisons.Equal, id));
 
-            var entity = (await table.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
+            var entity = (await this.cloudTable.ExecuteQuerySegmentedAsync(query, null)).Results.FirstOrDefault();
 
             var deleteOperation = TableOperation.Delete(entity);
 
-            return await table.ExecuteAsync(deleteOperation);
+            return await this.cloudTable.ExecuteAsync(deleteOperation);
         }
     }
 }

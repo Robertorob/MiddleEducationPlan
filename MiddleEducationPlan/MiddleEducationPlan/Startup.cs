@@ -28,6 +28,7 @@ namespace MiddleEducationPlan.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<IAzureKeyVaultService, AzureKeyVaultService>();
+            services.AddSingleton<ICloudTableClientFactory, CloudTableClientFactory>();
             services.AddSingleton<IProjectService, ProjectService>();
             services.AddSingleton<ITaskService, TaskService>();
 

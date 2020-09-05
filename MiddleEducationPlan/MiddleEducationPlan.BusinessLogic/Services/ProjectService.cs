@@ -12,47 +12,52 @@ using System.Threading.Tasks;
 
 namespace MiddleEducationPlan.BusinessLogic.Services
 {
-    public class ProjectService : StorageAccountService<ProjectEntity>, IProjectService
+    public class ProjectService : IProjectService
     {
         private const string ENTITY_NAME = "Project";
-        private readonly CloudTable table;
+        private readonly CloudTable cloudTable;
         private readonly ITaskService taskService;
+        private readonly StorageAccountService<ProjectEntity> storageAccountService;
 
-        public ProjectService(IAzureKeyVaultService keyVaultServie, ITaskService taskService) : base(keyVaultServie) 
-        { 
-            this.table = this.tableClient.GetTableReference(ProjectService.ENTITY_NAME);
+        public ProjectService(ITaskService taskService, ICloudTableClientFactory cloudTableClientFactory)
+        {
+            var cloudTableClient = cloudTableClientFactory.GetCloudTableClient();
+            this.cloudTable = cloudTableClient.GetTableReference(ProjectService.ENTITY_NAME);
+            this.storageAccountService = new StorageAccountService<ProjectEntity>(this.cloudTable);
             this.taskService = taskService;
         }
 
         public async Task<TableResult> AddProjectAsync(AddProjectModel project)
         {
+            await this.cloudTable.CreateIfNotExistsAsync();
+
             Guid id = Guid.NewGuid();
-            int code = await GetProjectCodeAndIncrementAsync(table);
-            return await AddEntityAsync(new ProjectEntity 
+            int code = await GetProjectCodeAndIncrementAsync(this.cloudTable);
+            return await this.storageAccountService.AddEntityAsync(new ProjectEntity 
             { 
                 Id = id,
                 Code = code,
                 PartitionKey = id.ToString(),
                 RowKey = id.ToString(),
                 Name = project.Name
-            }, this.table);
+            });
         }
 
         public async Task<TableResult> UpdateProjectAsync(Guid id, UpdateProjectModel project)
         {
-            var projectEntity = await this.GetEntityById(id, this.table);
+            var projectEntity = await this.storageAccountService.GetEntityById(id);
 
             if (projectEntity == null)
                 return null;
 
             projectEntity.Name = project.Name;
 
-            return await this.UpdateEntityAsync(projectEntity, this.table);
+            return await this.storageAccountService.UpdateEntityAsync(projectEntity);
         }
 
         public async Task<ProjectEntity> GetProjectByIdAsync(Guid id)
         {
-            var project = await GetEntityById(id, this.table);
+            var project = await this.storageAccountService.GetEntityById(id);
             var tasks = await this.taskService.GetTasksAsync(new GetTaskModel
             {
                 ProjectId = id
@@ -72,7 +77,7 @@ namespace MiddleEducationPlan.BusinessLogic.Services
             if (!string.IsNullOrEmpty(combined))
                 query = query.Where(combined);
 
-            var projects = await table.ExecuteQuerySegmentedAsync(query, null);
+            var projects = await this.cloudTable.ExecuteQuerySegmentedAsync(query, null);
 
             if (filter.IncludeTasks)
             {
@@ -125,7 +130,7 @@ namespace MiddleEducationPlan.BusinessLogic.Services
 
         public async Task<TableResult> DeleteProjectByIdAsync(Guid id)
         {
-            return await DeleteEntityByIdAsync(id, this.table);
+            return await this.storageAccountService.DeleteEntityByIdAsync(id);
         }
     }
 }
