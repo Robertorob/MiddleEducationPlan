@@ -42,7 +42,7 @@ namespace MiddleEducationPlan.UnitTests.Project
         [Test]
         public async Task GetAsync_ExistingProject_Ok200()
         {
-            var result = await this.projectController.GetAsync(this.mockProjectCloudTableClient.mockProjectCloudTable.Guids[0]) as ObjectResult;
+            var result = await this.projectController.GetAsync(this.mockProjectCloudTableClient.mockProjectCloudTable.projects[0].Id) as ObjectResult;
 
             Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.OK);

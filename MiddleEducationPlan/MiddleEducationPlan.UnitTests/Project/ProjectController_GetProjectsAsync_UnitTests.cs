@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
+using MiddleEducationPlan.BusinessLogic.Services;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
+using MiddleEducationPlan.Common.Interfaces;
+using MiddleEducationPlan.UnitTests.Project.Mock;
 using MiddleEducationPlan.Web.Controllers;
 using Moq;
 using NUnit.Framework;
@@ -16,36 +19,27 @@ namespace MiddleEducationPlan.UnitTests.Project
     public class ProjectController_GetProjectsAsync_UnitTests
     {
         private ProjectController projectController;
-        private List<ProjectEntity> projects;
         private GetProjectModel getProjectWithCode3;
         private GetProjectModel getProject;
+        private MockProjectCloudTableClient mockProjectCloudTableClient;
 
         [SetUp]
         public void Setup()
         {
-            this.projects = new List<ProjectEntity>();
-
-            for (int i = 0; i < 3; i++)
-            {
-                var projectEntityId = Guid.NewGuid();
-                var projectEntity = new ProjectEntity()
-                {
-                    Id = projectEntityId,
-                    Code = i,
-                    Name = $"name {i}"
-                };
-                this.projects.Add(projectEntity);
-            }
-
-            var projectServiceMock = new Mock<IProjectService>();
-
             this.getProject = new GetProjectModel();
-            projectServiceMock.Setup(f => f.GetProjectsAsync(this.getProject)).Returns(Task.FromResult(this.projects));
-
             this.getProjectWithCode3 = new GetProjectModel { Code = 3 };
-            projectServiceMock.Setup(f => f.GetProjectsAsync(this.getProjectWithCode3)).Returns(Task.FromResult(this.projects.Where(f => f.Code == 3).ToList()));
 
-            this.projectController = new ProjectController(projectServiceMock.Object);
+            var taskServiceMock = new Mock<ITaskService>();
+
+            this.mockProjectCloudTableClient = new MockProjectCloudTableClient(new Uri("https://educationplanstorageacc.table.core.windows.net/"),
+                new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials());
+
+            var cloudTableClientFactoryMock = new Mock<ICloudTableClientFactory>();
+            cloudTableClientFactoryMock.Setup(f => f.GetCloudTableClient()).Returns(mockProjectCloudTableClient);
+
+            var projectService = new ProjectService(taskServiceMock.Object, cloudTableClientFactoryMock.Object);
+
+            this.projectController = new ProjectController(projectService);
         }
 
         [Test]
@@ -55,6 +49,7 @@ namespace MiddleEducationPlan.UnitTests.Project
 
             Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.OK);
+            Assert.AreEqual(((List<ProjectEntity>)result.Value).Count, this.mockProjectCloudTableClient.mockProjectCloudTable.projects.Count);
         }
 
         [Test]
