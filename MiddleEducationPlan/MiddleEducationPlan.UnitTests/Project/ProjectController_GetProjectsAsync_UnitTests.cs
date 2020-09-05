@@ -53,6 +53,7 @@ namespace MiddleEducationPlan.UnitTests.Project
         {
             var result = await this.projectController.GetProjectsAsync(this.getProject) as ObjectResult;
 
+            Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.OK);
         }
 
@@ -61,6 +62,7 @@ namespace MiddleEducationPlan.UnitTests.Project
         {
             var result = await this.projectController.GetProjectsAsync(this.getProjectWithCode3) as NotFoundResult;
 
+            Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.NotFound);
         }
     }

@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.WindowsAzure.Storage.Table;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Services;
 using MiddleEducationPlan.Common.Interfaces;
+using MiddleEducationPlan.UnitTests.Project.Mock;
 using MiddleEducationPlan.Web.Controllers;
 using Moq;
 using NUnit.Framework;
@@ -11,29 +13,28 @@ using System.Threading.Tasks;
 
 namespace MiddleEducationPlan.UnitTests.Project
 {
+    /// <summary>
+    /// Mock class for CloudTable object
+    /// </summary>
+    
+
     public class ProjectController_GetAsync_UnitTests
     {
         private ProjectController projectController;
-        private Guid projectEntityId;
+        private MockProjectCloudTableClient mockProjectCloudTableClient;
 
         [SetUp]
         public void Setup()
         {
-            this.projectEntityId = Guid.NewGuid();
-            var projectEntity = new BusinessLogic.TableEntities.ProjectEntity()
-            {
-                Id = this.projectEntityId,
-                Name = "name"
-            };
-
-            var keyVaultMock = new Mock<ICloudTableClientFactory>();
             var taskServiceMock = new Mock<ITaskService>();
 
-            var projectService = new ProjectService(taskServiceMock.Object, keyVaultMock.Object);
+            this.mockProjectCloudTableClient = new MockProjectCloudTableClient(new Uri("https://educationplanstorageacc.table.core.windows.net/"),
+                new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials());
 
-            //var projectServiceMock = new Mock<IProjectService>();
-            //projectServiceMock.Setup(f => f.GetProjectByIdAsync(this.projectEntityId)).Returns(Task.FromResult(projectEntity));
-            //projectServiceMock.Setup(f => f.GetProjectByIdAsync(this.projectEntityId)).Returns(Task.FromResult(projectEntity));
+            var cloudTableClientFactoryMock = new Mock<ICloudTableClientFactory>();
+            cloudTableClientFactoryMock.Setup(f => f.GetCloudTableClient()).Returns(mockProjectCloudTableClient);
+
+            var projectService = new ProjectService(taskServiceMock.Object, cloudTableClientFactoryMock.Object);
 
             this.projectController = new ProjectController(projectService);
         }
@@ -41,8 +42,9 @@ namespace MiddleEducationPlan.UnitTests.Project
         [Test]
         public async Task GetAsync_ExistingProject_Ok200()
         {
-            var result = await this.projectController.GetAsync(this.projectEntityId) as ObjectResult;
+            var result = await this.projectController.GetAsync(this.mockProjectCloudTableClient.mockProjectCloudTable.Guids[0]) as ObjectResult;
 
+            Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.OK);
         }
 
@@ -51,6 +53,7 @@ namespace MiddleEducationPlan.UnitTests.Project
         {
             var result = await this.projectController.GetAsync(Guid.NewGuid()) as NotFoundResult;
 
+            Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.NotFound);
         }
     }
