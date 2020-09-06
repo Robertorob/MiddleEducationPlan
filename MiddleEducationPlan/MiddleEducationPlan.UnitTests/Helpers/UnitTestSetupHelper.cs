@@ -12,11 +12,13 @@ namespace MiddleEducationPlan.UnitTests.Helpers
 {
     public static class UnitTestSetupHelper
     {
+        private const string BASE_ADDRESS = "https://educationplanstorageacc.table.core.windows.net/";
+
         public static (MockProjectCloudTableClient, ProjectController) GetProjectControllerAndCloudTableClientMock()
         {
             var taskServiceMock = new Mock<ITaskService>();
 
-            var mockProjectCloudTableClient = new MockProjectCloudTableClient(new Uri("https://educationplanstorageacc.table.core.windows.net/"),
+            var mockProjectCloudTableClient = new MockProjectCloudTableClient(new Uri(UnitTestSetupHelper.BASE_ADDRESS),
                 new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials());
 
             var cloudTableClientFactoryMock = new Mock<ICloudTableClientFactory>();
@@ -30,10 +32,9 @@ namespace MiddleEducationPlan.UnitTests.Helpers
         public static (MockTaskCloudTableClient, TaskController) GetTaskControllerAndCloudTableClientMock()
         {
             var projectServiceMock = new Mock<IProjectService>();
-
             projectServiceMock.Setup(f => f.GetProjectByIdAsync(It.IsAny<Guid>())).Returns(Task.FromResult(new BusinessLogic.TableEntities.ProjectEntity()));
 
-            var mockTaskCloudTableClient = new MockTaskCloudTableClient(new Uri("https://educationplanstorageacc.table.core.windows.net/"),
+            var mockTaskCloudTableClient = new MockTaskCloudTableClient(new Uri(UnitTestSetupHelper.BASE_ADDRESS),
                 new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials());
 
             var cloudTableClientFactoryMock = new Mock<ICloudTableClientFactory>();
