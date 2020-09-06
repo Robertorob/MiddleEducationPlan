@@ -23,11 +23,7 @@ namespace MiddleEducationPlan.UnitTests.Project
         [Test]
         public async Task DeleteAsync_ExistingProjects_Ok200()
         {
-            var startCount = this.mockProjectCloudTableClient.mockProjectCloudTable.projects.Count;
-
             var result = await this.projectController.DeleteAsync(this.mockProjectCloudTableClient.mockProjectCloudTable.projects[1].Id) as ObjectResult;
-
-            var endCount = this.mockProjectCloudTableClient.mockProjectCloudTable.projects.Count;
 
             Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.OK);

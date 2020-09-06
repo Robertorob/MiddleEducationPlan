@@ -2,9 +2,11 @@
 using MiddleEducationPlan.BusinessLogic.Services;
 using MiddleEducationPlan.Common.Interfaces;
 using MiddleEducationPlan.UnitTests.Project.Mock;
+using MiddleEducationPlan.UnitTests.TaskUnitTests.Mock;
 using MiddleEducationPlan.Web.Controllers;
 using Moq;
 using System;
+using System.Threading.Tasks;
 
 namespace MiddleEducationPlan.UnitTests.Helpers
 {
@@ -23,6 +25,23 @@ namespace MiddleEducationPlan.UnitTests.Helpers
             var projectService = new ProjectService(taskServiceMock.Object, cloudTableClientFactoryMock.Object);
 
             return (mockProjectCloudTableClient, new ProjectController(projectService));
+        }
+
+        public static (MockTaskCloudTableClient, TaskController) GetTaskControllerAndCloudTableClientMock()
+        {
+            var projectServiceMock = new Mock<IProjectService>();
+
+            projectServiceMock.Setup(f => f.GetProjectByIdAsync(It.IsAny<Guid>())).Returns(Task.FromResult(new BusinessLogic.TableEntities.ProjectEntity()));
+
+            var mockTaskCloudTableClient = new MockTaskCloudTableClient(new Uri("https://educationplanstorageacc.table.core.windows.net/"),
+                new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials());
+
+            var cloudTableClientFactoryMock = new Mock<ICloudTableClientFactory>();
+            cloudTableClientFactoryMock.Setup(f => f.GetCloudTableClient()).Returns(mockTaskCloudTableClient);
+
+            var taskService = new TaskService(cloudTableClientFactoryMock.Object);
+
+            return (mockTaskCloudTableClient, new TaskController(taskService, projectServiceMock.Object));
         }
     }
 }

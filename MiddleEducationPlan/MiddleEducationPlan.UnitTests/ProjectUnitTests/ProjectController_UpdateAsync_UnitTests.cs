@@ -1,16 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
-using MiddleEducationPlan.BusinessLogic.Services;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
-using MiddleEducationPlan.Common.Interfaces;
 using MiddleEducationPlan.UnitTests.Helpers;
 using MiddleEducationPlan.UnitTests.Project.Mock;
 using MiddleEducationPlan.Web.Controllers;
-using Moq;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
