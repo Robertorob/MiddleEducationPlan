@@ -1,16 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.WindowsAzure.Storage.Table;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
 using MiddleEducationPlan.BusinessLogic.Services;
-using MiddleEducationPlan.BusinessLogic.TableEntities;
 using MiddleEducationPlan.Common.Interfaces;
 using MiddleEducationPlan.UnitTests.Project.Mock;
 using MiddleEducationPlan.Web.Controllers;
 using Moq;
 using NUnit.Framework;
 using System;
-using System.Linq;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -42,7 +40,7 @@ namespace MiddleEducationPlan.UnitTests.Project
 
             var projectService = new ProjectService(taskServiceMock.Object, cloudTableClientFactoryMock.Object);
 
-            this.projectController = new ProjectController(projectService);
+            this.projectController = new ProjectController(projectService);    
         }
 
         [Test]
@@ -57,10 +55,15 @@ namespace MiddleEducationPlan.UnitTests.Project
         [Test]
         public async Task AddAsync_EmptyName_BadRequest()
         {
-            var result = await this.projectController.AddAsync(this.addEmptyNameProject) as ObjectResult;
+            var result = Validator.TryValidateObject(this.addEmptyNameProject, new ValidationContext(this.addEmptyNameProject, null, null), null, true);
 
-            Assert.IsNotNull(result);
-            Assert.AreEqual(result.StatusCode, (int)HttpStatusCode.BadRequest);
+            Assert.IsFalse(result);
+
+            this.projectController.ModelState.AddModelError("Name", "The 'Name' field is required");
+            var response = await this.projectController.AddAsync(this.addEmptyNameProject) as ObjectResult;
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(response.StatusCode, (int)HttpStatusCode.BadRequest);
         }
     }
 }
