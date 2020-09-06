@@ -1,4 +1,4 @@
-﻿@model MiddleEducationPlan.BusinessLogic.TableEntities.ProjectEntity
+﻿@model MiddleEducationPlan.BusinessLogic.Models.Project.AddProjectModel
 
 @{
     ViewData["Title"] = "Create";
@@ -8,29 +8,29 @@
 
 <h4>Project</h4>
 <hr />
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+    <form action="/ProjectView/CreatePost" method="post">
+        <table class="table">
+            <thead>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Name
+                    </td>
+                    <td>
+                        <input type="text" name="Name" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <input class="btn" type="submit" value="Send" />
+    </form>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Back to list", "Index", new { /* id=item.PrimaryKey */ })
 </div>
 
 @section Scripts {

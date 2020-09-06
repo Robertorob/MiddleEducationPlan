@@ -5,6 +5,7 @@ using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
 using MiddleEducationPlan.Extensions;
+using MiddleEducationPlan.Web.Models;
 
 namespace MiddleEducationPlan.Web.Controllers
 {
@@ -32,21 +33,16 @@ namespace MiddleEducationPlan.Web.Controllers
             return View();
         }
 
-        //// POST: Todos/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
+        [HttpPost]
         //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,Description,CreatedDate")] Todo todo)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        context.Add(todo);
-        //        await context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(todo);
-        //}
+        public async Task<IActionResult> CreatePost(AddProjectModel todo)
+        {
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View(todo);
+        }
 
         //// GET: Todos/Details/5
         //public async Task<IActionResult> Details(int? id)
