@@ -34,7 +34,7 @@ namespace MiddleEducationPlan.Web.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> Get(Guid id)
+        public async Task<ActionResult> GetAsync(Guid id)
         {
             var result = await this.taskService.GetTaskByIdAsync(id);
 
@@ -45,7 +45,7 @@ namespace MiddleEducationPlan.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Add([FromBody] AddTaskModel task)
+        public async Task<ActionResult> AddAsync([FromBody] AddTaskModel task)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
@@ -60,7 +60,7 @@ namespace MiddleEducationPlan.Web.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(Guid id, [FromBody] UpdateTaskModel task)
+        public async Task<ActionResult> UpdateAsync(Guid id, [FromBody] UpdateTaskModel task)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.GetErrorMessages());
@@ -74,7 +74,7 @@ namespace MiddleEducationPlan.Web.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(Guid id)
+        public async Task<ActionResult> DeleteAsync(Guid id)
         {
             var result = await this.taskService.GetTaskByIdAsync(id);
 
