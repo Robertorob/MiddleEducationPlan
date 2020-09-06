@@ -9,5 +9,9 @@
     <ProjectReference Include="..\MiddleEducationPlan.BusinessLogic\MiddleEducationPlan.BusinessLogic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+  </ItemGroup>
+
 
 </Project>
