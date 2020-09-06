@@ -1,14 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
-using MiddleEducationPlan.BusinessLogic.Services;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
-using MiddleEducationPlan.Common.Interfaces;
+using MiddleEducationPlan.UnitTests.Helpers;
 using MiddleEducationPlan.UnitTests.Project.Mock;
 using MiddleEducationPlan.Web.Controllers;
-using Moq;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -28,17 +24,7 @@ namespace MiddleEducationPlan.UnitTests.Project
             this.getProject = new GetProjectModel();
             this.getProjectWithCode3 = new GetProjectModel { Code = 3 };
 
-            var taskServiceMock = new Mock<ITaskService>();
-
-            this.mockProjectCloudTableClient = new MockProjectCloudTableClient(new Uri("https://educationplanstorageacc.table.core.windows.net/"),
-                new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials());
-
-            var cloudTableClientFactoryMock = new Mock<ICloudTableClientFactory>();
-            cloudTableClientFactoryMock.Setup(f => f.GetCloudTableClient()).Returns(mockProjectCloudTableClient);
-
-            var projectService = new ProjectService(taskServiceMock.Object, cloudTableClientFactoryMock.Object);
-
-            this.projectController = new ProjectController(projectService);
+            (this.mockProjectCloudTableClient, this.projectController) = UnitTestSetupHelper.GetProjectControllerAndCloudTableClientMock();
         }
 
         [Test]

@@ -15,17 +15,23 @@ namespace MiddleEducationPlan.UnitTests.Project.Mock
             new ProjectEntity
             {
                 Id = new Guid("f075cc3a-cd87-41ac-be51-a071ebf87641"),
-                Code = 0
+                Name = "name 0",
+                Code = 0,
+                ETag= "*"
             },
             new ProjectEntity
             {
                 Id = new Guid("08a7db72-02a7-4a7d-9edd-11ef91133ada"),
-                Code = 1
+                Name = "name 1",
+                Code = 1,
+                ETag= "*"
             },
             new ProjectEntity
             {
                 Id = new Guid("1c7fb7c6-7c13-4926-91af-435182b10667"),
-                Code = 2
+                Name = "name 2",
+                Code = 2,
+                ETag= "*"
             }
         };
 

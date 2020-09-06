@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MiddleEducationPlan.UnitTests.Project
 {
-    public class ProjectController_GetAsync_UnitTests
+    public class ProjectController_DeleteAsync_UnitTests
     {
         private ProjectController projectController;
         private MockProjectCloudTableClient mockProjectCloudTableClient;
@@ -21,21 +21,25 @@ namespace MiddleEducationPlan.UnitTests.Project
         }
 
         [Test]
-        public async Task GetAsync_ExistingProject_Ok200()
+        public async Task DeleteAsync_ExistingProjects_Ok200()
         {
-            var result = await this.projectController.GetAsync(this.mockProjectCloudTableClient.mockProjectCloudTable.projects[0].Id) as ObjectResult;
+            var startCount = this.mockProjectCloudTableClient.mockProjectCloudTable.projects.Count;
+
+            var result = await this.projectController.DeleteAsync(this.mockProjectCloudTableClient.mockProjectCloudTable.projects[1].Id) as ObjectResult;
+
+            var endCount = this.mockProjectCloudTableClient.mockProjectCloudTable.projects.Count;
 
             Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.OK);
         }
 
         [Test]
-        public async Task GetAsync_NonExistingProject_NotFound404()
+        public async Task DeleteAsync_NonExistingProject_NotFound404()
         {
-            var result = await this.projectController.GetAsync(Guid.NewGuid()) as NotFoundResult;
+            var result = await this.projectController.DeleteAsync(Guid.NewGuid()) as NotFoundResult;
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.NotFound);
+            Assert.AreEqual(result.StatusCode, (int)HttpStatusCode.NotFound);
         }
     }
 }
