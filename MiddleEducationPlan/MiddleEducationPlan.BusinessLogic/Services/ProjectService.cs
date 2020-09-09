@@ -87,7 +87,7 @@ namespace MiddleEducationPlan.BusinessLogic.Services
                 } 
             }
 
-            return projects.ToList();
+            return projects.Where(f => f.RowKey != "0").ToList();
         }
 
         private string CombineProjectFilters(GetProjectModel filter)

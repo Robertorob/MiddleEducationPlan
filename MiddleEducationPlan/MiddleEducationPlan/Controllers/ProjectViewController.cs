@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
@@ -25,7 +26,7 @@ namespace MiddleEducationPlan.Web.Controllers
             if (result.Count == 0)
                 return NotFound();
 
-            return View(result);
+            return View(result.OrderByDescending(f => f.Code));
         }
 
         public IActionResult Create()
@@ -34,124 +35,82 @@ namespace MiddleEducationPlan.Web.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreatePost(AddProjectModel todo)
+        public async Task<ResultModel<ProjectEntity>> CreatePost(AddProjectModel project)
         {
+            if (!ModelState.IsValid)
+                return new ResultModel<ProjectEntity>
+                {
+                    Status = Status.Error,
+                    ErrorMessage = "Model is invalid"
+                };
+
             if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(Index));
+                var projectEntity = (await this.projectService.AddProjectAsync(project)).Result;
+                if(projectEntity == null)
+                {
+                    return new ResultModel<ProjectEntity>
+                    {
+                        Status = Status.Error,
+                        ErrorMessage = "Unexpected error"
+                    };
+                }
+                return new ResultModel<ProjectEntity>
+                {
+                    Status = Status.Success,
+                    Value = (ProjectEntity)projectEntity
+                };
             }
-            return View(todo);
+
+            return null;
         }
 
-        //// GET: Todos/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpGet]
+        public async Task<ActionResult> GetProjectsAsync([FromQuery] GetProjectModel filter)
+        {
+            var result = await this.projectService.GetProjectsAsync(filter);
 
-        //    var todo = await context.Todo
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (todo == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (result.Count == 0)
+                return NotFound();
 
-        //    return View(todo);
-        //}
+            return Ok(result);
+        }
 
-        //// GET: Todos/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetAsync(Guid id)
+        {
+            var result = await this.projectService.GetProjectByIdAsync(id);
 
-        //    var todo = await context.Todo.FindAsync(id);
-        //    if (todo == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(todo);
-        //}
+            if (result == null)
+                return NotFound();
 
-        //// POST: Todos/Edit/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,Description,CreatedDate")] Todo todo)
-        //{
-        //    if (id != todo.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            context.Update(todo);
-        //            await context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!TodoExists(todo.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(todo);
-        //}
-
-        //// GET: Todos/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var todo = await context.Todo
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (todo == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(todo);
-        //}
-
-        //// POST: Todos/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var todo = await context.Todo.FindAsync(id);
-        //    context.Todo.Remove(todo);
-        //    await context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool TodoExists(int id)
-        //{
-        //    return context.Todo.Any(e => e.Id == id);
-        //}
+            return Ok(result);
+        }
 
 
-        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateAsync(Guid id, [FromBody] UpdateProjectModel project)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState.GetErrorMessages());
+
+            var result = await this.projectService.UpdateProjectAsync(id, project);
+
+            if (result == null)
+                return NotFound();
+
+            return Ok(result.Result);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteAsync(Guid id)
+        {
+            var result = await this.projectService.GetProjectByIdAsync(id);
+
+            if (result == null)
+                return NotFound();
+
+            return Ok((await this.projectService.DeleteProjectByIdAsync(id)).Result);
+        }
     }
 }
