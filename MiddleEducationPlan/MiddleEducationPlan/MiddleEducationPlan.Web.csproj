@@ -6,6 +6,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\ProjectView.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\ProjectView.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MiddleEducationPlan.BusinessLogic\MiddleEducationPlan.BusinessLogic.csproj" />
   </ItemGroup>
 

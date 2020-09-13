@@ -8,7 +8,6 @@
 <h1>Create</h1>
 
 <h4>Project</h4>
-<hr />
 
 <div class="row">
     <table class="table">
@@ -39,29 +38,8 @@
     @Html.ActionLink("Back to list", "Index", new { /* id=item.PrimaryKey */ })
 </div>
 
-<script>
-    $(document).ready(function () {
-        console.log("ready!");
-    });
+<div style="display:none" id="dialog" title="Success">
+    <p>The project was successfuly created.</p>
+</div>
 
-    function CreateProject() {
-        let name = $("#projectName").val();
-
-        let project = {};
-        project.Name = name;
-
-        $.post("CreatePost", project, (result) => {
-            if (result.status === 0) {
-                window.alert("success");
-                ClearForm();
-            }
-            else {
-                window.alert(result.errorMessage);
-            }
-        })
-    }
-
-    function ClearForm() {
-        $("#projectName").val("");
-    }
-</script>
+<script src="~/ProjectView.js"></script>
