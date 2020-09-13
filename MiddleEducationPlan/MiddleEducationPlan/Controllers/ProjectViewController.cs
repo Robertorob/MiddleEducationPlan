@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +48,7 @@ namespace MiddleEducationPlan.Web.Controllers
             if (ModelState.IsValid)
             {
                 var projectEntity = (await this.projectService.AddProjectAsync(project)).Result;
-                if(projectEntity == null)
+                if (projectEntity == null)
                 {
                     return new ResultModel<ProjectEntity>
                     {

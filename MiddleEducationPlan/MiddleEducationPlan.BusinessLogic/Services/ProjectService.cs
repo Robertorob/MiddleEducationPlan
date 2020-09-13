@@ -39,7 +39,10 @@ namespace MiddleEducationPlan.BusinessLogic.Services
                 Code = code,
                 PartitionKey = id.ToString(),
                 RowKey = id.ToString(),
-                Name = project.Name
+                Name = project.Name,
+                ProjectType = project.ProjectType,
+                Description = project.Description,
+                Owners = string.Join(';', project.Owners)
             });
         }
 
@@ -51,6 +54,9 @@ namespace MiddleEducationPlan.BusinessLogic.Services
                 return null;
 
             projectEntity.Name = project.Name;
+            projectEntity.ProjectType = project.ProjectType;
+            projectEntity.Description = project.Description;
+            projectEntity.Owners = string.Join(';', project.Owners);
 
             return await this.storageAccountService.UpdateEntityAsync(projectEntity);
         }

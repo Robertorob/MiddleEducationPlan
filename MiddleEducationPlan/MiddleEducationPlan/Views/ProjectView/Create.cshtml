@@ -23,15 +23,20 @@
                 </td>
             </tr>
             <tr>
+                <td>
+                    <lable class="col-form-label">Description</lable>
+                </td>
+                <td>
+                    <input type="text" id="projectDescription" class="form-control" />
+                </td>
+            </tr>
+            <tr>
                 <td colspan="2">
                     <button style="width:100%" class="btn btn-primary" onclick="CreateProject()">Send</button>
                 </td>
             </tr>
         </tbody>
     </table>
-    @*<form action="/ProjectView/CreatePost" method="post" id="createProjectForm">
-            <input class="btn-primary" type="submit" value="Send" />
-        </form>*@
 </div>
 
 <div>
@@ -40,6 +45,9 @@
 
 <div style="display:none" id="dialog" title="Success">
     <p>The project was successfuly created.</p>
+</div>
+<div style="display:none" id="error" title="Error">
+    <p>Error occured.</p>
 </div>
 
 <script src="~/ProjectView.js"></script>

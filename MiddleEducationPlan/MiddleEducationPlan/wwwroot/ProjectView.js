@@ -1,25 +1,29 @@
-﻿$(document).ready(function () {
-    console.log("ready!");
-});
-
-function CreateProject() {
+﻿function CreateProject() {
     let name = $("#projectName").val();
+    let description = $("#projectDescription").val();
 
     let project = {};
     project.Name = name;
+    project.Description = description;
 
-    $.post("CreatePost", project, (result) => {
+    $.post("CreatePost", project).done((result) => {
+        debugger;
         if (result.status === 0) {
             $("#dialog").dialog();
-            //window.alert("success");
             ClearForm();
         }
         else {
-            window.alert(result.errorMessage);
+            $("#error").dialog();
+            ClearForm();
         }
+    })
+    .fail(() => {
+        $("#error").dialog();
+        ClearForm();
     })
 }
 
 function ClearForm() {
     $("#projectName").val("");
+    $("#projectDescription").val("");
 }
