@@ -1,92 +1,92 @@
 ﻿
 
 $(document).ready(function () {
-    $.get("GetProjectTypes").done((result) => {
-        if (result.status === 0) {
-            var options = result.value.values;
 
-            for (var i = 0; i < options.length; i++) {
-                var o = new Option(options[i].name, options[i].value);
-                /// jquerify the DOM object 'o' so we can use the html method
-                $(o).html(options[i].name);
-                $("#projectType").append(o);
-            }
+    getProjectTypeSelectValues();
 
-            $("#projectType").chosen({ width: "100%" })
-            //$.validator.setDefaults({ ignore: ":hidden:not(select)" });
-            $.validator.setDefaults({ ignore: ":hidden:not(.chosen-select)" });
+});
 
-            if ($("select.chosen-select").length > 0) {
-                $("select.chosen-select").each(function () {
-                    if ($(this).attr('required') !== undefined) {
-                        $(this).on("change", function () {
-                            $(this).valid();
-                        });
+function getProjectTypeSelectValues() {
+    $.get("GetProjectTypes")
+        .done((result) => {
+            if (result.status === 0) {
+                var options = result.value.values;
+
+                for (var i = 0; i < options.length; i++) {
+                    var o = new Option(options[i].name, options[i].value);
+                    $(o).html(options[i].name);
+                    $("#projectType").append(o);
+                }
+
+                $("#projectType").chosen({ width: "100%" })
+                $.validator.setDefaults({ ignore: ":hidden:not(.chosen-select)" });
+
+                if ($("select.chosen-select").length > 0) {
+                    $("select.chosen-select").each(function () {
+                        if ($(this).attr('required') !== undefined) {
+                            $(this).on("change", function () {
+                                $(this).valid();
+                            });
+                        }
+                    });
+                }
+
+                $("#projectForm").validate({
+                    errorPlacement: function (error, element) {
+                        if (element.is("select.chosen-select")) {
+                            element.next("div.chosen-container").append(error);
+                        } else {
+                            error.insertAfter(element);
+                        }
                     }
                 });
             }
-
-            $("#projectForm").validate({
-                errorPlacement: function (error, element) {
-                    console.log("placement");
-                    if (element.is("select.chosen-select")) {
-                        console.log("placement for chosen");
-                        // placement for chosen
-                        element.next("div.chosen-container").append(error);
-                    } else {
-                        // standard placement
-                        error.insertAfter(element);
-                    }
-                }
-            });
-        }
-        else {
+            else {
+                getProjectTypesErrorDialog();
+                clearForm();
+            }
+        })
+        .fail(() => {
             getProjectTypesErrorDialog();
             clearForm();
-        }
-    })
-    .fail(() => {
-        getProjectTypesErrorDialog();
-        clearForm();
-    })
-
-
-});
+        })
+}
 
 function CreateProject() {
     if (validate() === false) {
         return;
     }
 
-    debugger;
+    let project = getProjectFromPage();
 
+    $.post("CreatePost", project)
+        .done((result) => {
+            if (result.status === 0) {
+                showSuccessDialogOnCreated();
+                clearForm();
+            }
+            else {
+                showErrorDialogOnCreated();
+                clearForm();
+            }
+        })
+        .fail(() => {
+            showErrorDialogOnCreated();
+            clearForm();
+        })
+}
+
+function getProjectFromPage() {
     let name = $("#projectName").val();
     let description = $("#projectDescription").val();
     let projectType = $("#projectType").val();
-
-    debugger;
 
     let project = {};
     project.Name = name;
     project.Description = description;
     project.ProjectType = projectType;
 
-    $.post("CreatePost", project).done((result) => {
-        debugger;
-        if (result.status === 0) {
-            showSuccessDialogOnCreated();
-            clearForm();
-        }
-        else {
-            showErrorDialogOnCreated();
-            clearForm();
-        }
-    })
-    .fail(() => {
-        debugger;
-        showErrorDialogOnCreated();
-        clearForm();
-    })
+    return project;
 }
 
 function showSuccessDialogOnCreated() {
