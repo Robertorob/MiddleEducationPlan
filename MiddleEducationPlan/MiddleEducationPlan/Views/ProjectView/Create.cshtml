@@ -5,9 +5,7 @@
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 
-<h1>Create</h1>
-
-<h4>Project</h4>
+<h1>Create Project</h1>
 
 <div class="row">
     <table class="table">
@@ -35,7 +33,9 @@
                     <lable class="col-form-label">Project Type</lable>
                 </td>
                 <td>
-                    <input type="text" id="projectType" class="form-control" />
+                    <select id="projectType" data-placeholder="Choose a project type..." class="form-control chosen-select">
+                        <option value="-1">N/A</option>
+                    </select>
                 </td>
             </tr>
             <tr>
@@ -51,11 +51,8 @@
     @Html.ActionLink("Back to list", "Index", new { /* id=item.PrimaryKey */ })
 </div>
 
-<div style="display:none" id="dialog" title="Success">
-    <p>The project was successfuly created.</p>
-</div>
-<div style="display:none" id="error" title="Error">
-    <p>Error occured.</p>
+<div style="display:none" id="dialog" title="">
+    <p id="dialogBody"></p>
 </div>
 
 <script src="~/ProjectView.js"></script>

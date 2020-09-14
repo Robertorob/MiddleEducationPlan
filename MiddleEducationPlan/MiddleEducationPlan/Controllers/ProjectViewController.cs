@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -64,6 +65,40 @@ namespace MiddleEducationPlan.Web.Controllers
             }
 
             return null;
+        }
+
+        [HttpGet]
+        public ResultModel<SelectModel<ProjectTypeModel>> GetProjectTypes()
+        {
+            try
+            {
+                var values = Enum.GetValues(typeof(ProjectType));
+                var selectModel = new SelectModel<ProjectTypeModel>();
+                selectModel.Values = new List<ProjectTypeModel>();
+
+                foreach (var item in values)
+                {
+                    selectModel.Values.Add(new ProjectTypeModel
+                    {
+                        Name = Enum.GetName(typeof(ProjectType), item),
+                        Value = (int)item
+                    });
+                }
+
+                return new ResultModel<SelectModel<ProjectTypeModel>>
+                {
+                    Value = selectModel,
+                    Status = Status.Success
+                };
+            }
+            catch (Exception exc)
+            {
+                return new ResultModel<SelectModel<ProjectTypeModel>>
+                {
+                    Status = Status.Error,
+                    ErrorMessage = exc.Message
+                };
+            }
         }
 
         [HttpGet]

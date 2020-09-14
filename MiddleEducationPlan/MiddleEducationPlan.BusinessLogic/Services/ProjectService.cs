@@ -40,7 +40,7 @@ namespace MiddleEducationPlan.BusinessLogic.Services
                 PartitionKey = id.ToString(),
                 RowKey = id.ToString(),
                 Name = project.Name,
-                ProjectType = project.ProjectType,
+                ProjectTypeInteger = (int)(project.ProjectType ?? ProjectType.None),
                 Description = project.Description,
                 Owners = string.Join(';', project.Owners)
             });
@@ -54,7 +54,7 @@ namespace MiddleEducationPlan.BusinessLogic.Services
                 return null;
 
             projectEntity.Name = project.Name;
-            projectEntity.ProjectType = project.ProjectType;
+            projectEntity.ProjectTypeInteger = (int)project.ProjectType;
             projectEntity.Description = project.Description;
             projectEntity.Owners = string.Join(';', project.Owners);
 

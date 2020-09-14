@@ -7,7 +7,7 @@ namespace MiddleEducationPlan.BusinessLogic.Models.Project
     {
         [Required]
         public string Name { get; set; }
-        public ProjectType ProjectType { get; set; }
+        public ProjectType? ProjectType { get; set; }
         public string Description { get; set; }
         public List<string> Owners { get; set; } = new List<string>();
     }
