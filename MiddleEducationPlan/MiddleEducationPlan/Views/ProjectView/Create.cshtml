@@ -7,48 +7,52 @@
 
 <h1>Create Project</h1>
 
-<div class="row">
-    <table class="table">
-        <thead>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <lable class="col-form-label">Name</lable>
-                </td>
-                <td>
-                    <input type="text" id="projectName" class="form-control" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <lable class="col-form-label">Description</lable>
-                </td>
-                <td>
-                    <input type="text" id="projectDescription" class="form-control" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <lable class="col-form-label">Project Type</lable>
-                </td>
-                <td>
-                    <select id="projectType" data-placeholder="Choose a project type..." class="form-control chosen-select">
-                        <option value="-1">N/A</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <button style="width:100%" class="btn btn-primary" onclick="CreateProject()">Send</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<div>
+<p>
     @Html.ActionLink("Back to list", "Index", new { /* id=item.PrimaryKey */ })
+</p>
+
+<div class="row">
+    <form id="projectForm" style="width:100%">
+        <table class="table">
+            <thead>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <lable class="col-form-label">Name</lable>
+                    </td>
+                    <td>
+                        <input type="text" id="projectName" class="form-control" required />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <lable class="col-form-label">Description</lable>
+                    </td>
+                    <td>
+                        <input type="text" id="projectDescription" class="form-control" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <lable class="col-form-label">Project Type</lable>
+                    </td>
+                    <td>
+                        <div class="with-select">
+                            <select id="projectType" data-placeholder="Choose a project type..." class="chosen-select" required="true">
+                                <option value="">N/A</option>
+                            </select>
+                         </div>
+                    </td>
+                </tr>               
+                <tr>
+                    <td colspan="2">
+                        <button type="button" style="width:100%" class="btn btn-primary" onclick="CreateProject()">Send</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
 </div>
 
 <div style="display:none" id="dialog" title="">

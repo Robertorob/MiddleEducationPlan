@@ -1,7 +1,6 @@
 ﻿
 
-(function () {
-    // Get project types
+$(document).ready(function () {
     $.get("GetProjectTypes").done((result) => {
         if (result.status === 0) {
             var options = result.value.values;
@@ -14,19 +13,53 @@
             }
 
             $("#projectType").chosen({ width: "100%" })
+            //$.validator.setDefaults({ ignore: ":hidden:not(select)" });
+            $.validator.setDefaults({ ignore: ":hidden:not(.chosen-select)" });
+
+            if ($("select.chosen-select").length > 0) {
+                $("select.chosen-select").each(function () {
+                    if ($(this).attr('required') !== undefined) {
+                        $(this).on("change", function () {
+                            $(this).valid();
+                        });
+                    }
+                });
+            }
+
+            $("#projectForm").validate({
+                errorPlacement: function (error, element) {
+                    console.log("placement");
+                    if (element.is("select.chosen-select")) {
+                        console.log("placement for chosen");
+                        // placement for chosen
+                        element.next("div.chosen-container").append(error);
+                    } else {
+                        // standard placement
+                        error.insertAfter(element);
+                    }
+                }
+            });
         }
         else {
             getProjectTypesErrorDialog();
-            ClearForm();
+            clearForm();
         }
     })
     .fail(() => {
         getProjectTypesErrorDialog();
-        ClearForm();
+        clearForm();
     })
-})();
+
+
+});
 
 function CreateProject() {
+    if (validate() === false) {
+        return;
+    }
+
+    debugger;
+
     let name = $("#projectName").val();
     let description = $("#projectDescription").val();
     let projectType = $("#projectType").val();
@@ -39,26 +72,28 @@ function CreateProject() {
     project.ProjectType = projectType;
 
     $.post("CreatePost", project).done((result) => {
+        debugger;
         if (result.status === 0) {
-            createdSuccessDialog();
-            ClearForm();
+            showSuccessDialogOnCreated();
+            clearForm();
         }
         else {
-            createdErrorDialog()
-            ClearForm();
+            showErrorDialogOnCreated();
+            clearForm();
         }
     })
     .fail(() => {
-        $("#createProjectError").dialog();
-        ClearForm();
+        debugger;
+        showErrorDialogOnCreated();
+        clearForm();
     })
 }
 
-function createdSuccessDialog() {
+function showSuccessDialogOnCreated() {
     showDialog("Success", "Successfully created");
 }
 
-function createdErrorDialog() {
+function showErrorDialogOnCreated() {
     showDialog("Error", "Error occured");
 }
 
@@ -72,12 +107,24 @@ function showDialog(header, text) {
     });
 
     $("#dialogBody").text(text);
+
+    $("#dialog").show();
 }
 
-function ClearForm() {
+function clearForm() {
     $("#projectName").val("");
     $("#projectDescription").val("");
 
-    $("#projectType").val("-1");
+    $("#projectType").val("");
     $("#projectType").trigger("chosen:updated");
+}
+
+function validate() {
+
+    console.log("validate");
+
+    let projectNameValidated = $("#projectForm").validate().element("#projectName");
+    let projectTypeValidated = $("#projectForm").validate().element("#projectType");
+     
+    return projectNameValidated && projectTypeValidated;
 }
