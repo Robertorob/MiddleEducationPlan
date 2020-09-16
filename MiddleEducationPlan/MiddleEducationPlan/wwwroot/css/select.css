@@ -20,3 +20,12 @@ input, select {
     margin-top: 5px;
     display: inline-block;
 }
+
+.height30 {
+    height: 30px
+}
+
+.chosen-container label {
+    font-size: 16px;
+    margin-top: 3px;
+}

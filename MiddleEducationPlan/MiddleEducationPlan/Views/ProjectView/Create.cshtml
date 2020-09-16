@@ -11,7 +11,7 @@
     @Html.ActionLink("Back to list", "Index", new { /* id=item.PrimaryKey */ })
 </p>
 
-<div class="row">
+<div id="projectFormContainer" class="row">
     <form id="projectForm" style="width:100%">
         <table class="table">
             <thead>
@@ -19,10 +19,10 @@
             <tbody>
                 <tr>
                     <td>
-                        <lable class="col-form-label">Name</lable>
+                        <lable class="col-form-label">Name&nbsp;<span class="red-star">*</span></lable>
                     </td>
                     <td>
-                        <input type="text" id="projectName" class="form-control" required />
+                        <input type="text" id="projectName" class="height30 form-control" required />
                     </td>
                 </tr>
                 <tr>
@@ -30,12 +30,12 @@
                         <lable class="col-form-label">Description</lable>
                     </td>
                     <td>
-                        <input type="text" id="projectDescription" class="form-control" />
+                        <input type="text" id="projectDescription" class="height30 form-control" />
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <lable class="col-form-label">Project Type</lable>
+                        <lable class="col-form-label">Project Type&nbsp;<span class="red-star">*</span></lable>
                     </td>
                     <td>
                         <div class="with-select">
@@ -47,7 +47,7 @@
                 </tr>               
                 <tr>
                     <td colspan="2">
-                        <button type="button" style="width:100%" class="btn btn-primary" onclick="CreateProject()">Send</button>
+                        <button type="button" style="width:100%" class="btn btn-primary" onclick="createProject()">Send</button>
                     </td>
                 </tr>
             </tbody>

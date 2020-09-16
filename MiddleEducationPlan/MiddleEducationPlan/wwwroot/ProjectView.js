@@ -1,15 +1,15 @@
 ﻿
 
 $(document).ready(function () {
-
     getProjectTypeSelectValues();
 
 });
 
 function getProjectTypeSelectValues() {
-    $.get('GetProjectTypes')
+    $.get('/ProjectView/GetProjectTypes')
         .done((result) => {
             if (result.status === 0) {
+
                 var options = result.value.values;
 
                 for (var i = 0; i < options.length; i++) {
@@ -18,7 +18,10 @@ function getProjectTypeSelectValues() {
                     $('#projectType').append(o);
                 }
 
-                $('#projectType').chosen({ width: '100%' })
+                $('#projectType').chosen({
+                    width: '100%'
+                    //,inherit_select_classes: true
+                })
                 $.validator.setDefaults({ ignore: ':hidden:not(.chosen-select)' });
 
                 if ($('select.chosen-select').length > 0) {
@@ -52,15 +55,21 @@ function getProjectTypeSelectValues() {
         })
 }
 
-function CreateProject() {
+function createProject() {
     if (validate() === false) {
         return;
     }
 
     let project = getProjectFromPage();
 
-    $.post('CreatePost', project)
+    showLoader();
+    disableForm();
+
+    $.post('/ProjectView/CreatePost', project)
         .done((result) => {
+            hideLoader();
+            enableForm();
+
             if (result.status === 0) {
                 showSuccessDialogOnCreated();
                 clearForm();
@@ -71,9 +80,28 @@ function CreateProject() {
             }
         })
         .fail(() => {
+            hideLoader();
+            enableForm();
+
             showErrorDialogOnCreated();
             clearForm();
         })
+}
+
+function showLoader() {
+    $('.loader').fadeIn();
+}
+
+function hideLoader() {
+    $('.loader').fadeOut();
+}
+
+function disableForm() {
+    $("#projectFormContainer").addClass("disabledContainer");
+}
+
+function enableForm() {
+    $("#projectFormContainer").removeClass("disabledContainer");
 }
 
 function getProjectFromPage() {
