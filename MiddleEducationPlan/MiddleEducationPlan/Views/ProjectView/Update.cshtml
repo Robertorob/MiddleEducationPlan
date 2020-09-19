@@ -1,15 +1,17 @@
-﻿@model MiddleEducationPlan.BusinessLogic.Models.Project.AddProjectModel
+﻿@model MiddleEducationPlan.BusinessLogic.Models.Project.UpdateProjectModel
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 
-<h1>Create Project</h1>
+<h1>Update Project</h1>
 
 <p>
     @Html.ActionLink("Back to list", "Index", new { /* id=item.PrimaryKey */ })
 </p>
+
+@Html.Hidden("projectId", Model.Id)
 
 <div id="projectFormContainer" class="row">
     <form id="projectForm" style="width:100%">
@@ -20,7 +22,7 @@
                 @await Html.PartialAsync("~/Views/ProjectView/CreateUpdateTemplate.cshtml")
                 <tr>
                     <td colspan="2">
-                        <button type="button" style="width:100%" class="btn btn-primary" onclick="createProject()">Send</button>
+                        <button type="button" style="width:100%" class="btn btn-primary" onclick="createProject()">Update</button>
                     </td>
                 </tr>
             </tbody>
@@ -31,4 +33,4 @@
 
 
 
-<script src="~/ProjectView.js"></script>
+<script src="~/UpdateProject.js"></script>

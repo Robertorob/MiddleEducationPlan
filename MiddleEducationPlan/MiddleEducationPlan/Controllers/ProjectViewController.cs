@@ -12,6 +12,7 @@ using MiddleEducationPlan.Web.Models;
 
 namespace MiddleEducationPlan.Web.Controllers
 {
+    //[Route("ProjectView")]
     public class ProjectViewController : Controller
     {
         private readonly IProjectService projectService;
@@ -37,10 +38,10 @@ namespace MiddleEducationPlan.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ResultModel<ProjectEntity>> CreatePost(AddProjectModel project)
+        public async Task<ResultModel<UpdateProjectModel>> CreatePost(AddProjectModel project)
         {
             if (!ModelState.IsValid)
-                return new ResultModel<ProjectEntity>
+                return new ResultModel<UpdateProjectModel>
                 {
                     Status = Status.Error,
                     ErrorMessage = "Model is invalid"
@@ -48,23 +49,41 @@ namespace MiddleEducationPlan.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var projectEntity = (await this.projectService.AddProjectAsync(project)).Result;
+                var projectEntity = (ProjectEntity)(await this.projectService.AddProjectAsync(project)).Result;
                 if (projectEntity == null)
                 {
-                    return new ResultModel<ProjectEntity>
+                    return new ResultModel<UpdateProjectModel>
                     {
                         Status = Status.Error,
-                        ErrorMessage = "Unexpected error"
+                        ErrorMessage = "Internal server error"
                     };
                 }
-                return new ResultModel<ProjectEntity>
+                return new ResultModel<UpdateProjectModel>
                 {
                     Status = Status.Success,
-                    Value = (ProjectEntity)projectEntity
+                    Value = new UpdateProjectModel
+                    {
+                        Id = projectEntity.Id
+                    }
                 };
             }
 
             return null;
+        }
+
+        public async Task<IActionResult> UpdateAsync(Guid id)
+        {
+            var projectEntity = await this.projectService.GetProjectByIdAsync(id);
+
+            var model = new UpdateProjectModel
+            {
+                Id = projectEntity.Id,
+                Name = projectEntity.Name,
+                Description = projectEntity.Description,
+                ProjectType = (ProjectType)projectEntity.ProjectTypeInteger
+            };
+
+            return View(model);
         }
 
         [HttpGet]
@@ -101,26 +120,31 @@ namespace MiddleEducationPlan.Web.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<ActionResult> GetProjectsAsync([FromQuery] GetProjectModel filter)
-        {
-            var result = await this.projectService.GetProjectsAsync(filter);
-
-            if (result.Count == 0)
-                return NotFound();
-
-            return Ok(result);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult> GetAsync(Guid id)
+        [HttpGet("ProjectView/GetAsync/{id}")]
+        public async Task<ResultModel<UpdateProjectModel>> GetAsync(Guid id)
         {
             var result = await this.projectService.GetProjectByIdAsync(id);
 
             if (result == null)
-                return NotFound();
+            {
+                return new ResultModel<UpdateProjectModel>
+                {
+                    Status = Status.Error,
+                    ErrorMessage = $"Could not find the project with id {id}"
+                };
+            }
 
-            return Ok(result);
+            return new ResultModel<UpdateProjectModel>
+            {
+                Status = Status.Success,
+                Value = new UpdateProjectModel
+                {
+                    Id = result.Id,
+                    Name = result.Name,
+                    Description = result.Description,
+                    ProjectType = (ProjectType)result.ProjectTypeInteger
+                }
+            };
         }
 
 

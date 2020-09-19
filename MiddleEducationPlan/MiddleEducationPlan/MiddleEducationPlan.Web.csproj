@@ -7,9 +7,11 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\ProjectView.js" />
+    <Content Remove="wwwroot\UpdateProject.js" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\UpdateProject.js" />
     <None Include="wwwroot\ProjectView.js" />
   </ItemGroup>
 

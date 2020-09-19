@@ -67,10 +67,15 @@ function createProject() {
 
     $.post('/ProjectView/CreatePost', project)
         .done((result) => {
+
+
             hideLoader();
+
             enableForm();
 
             if (result.status === 0) {
+                window.location.href = "/ProjectView/Update/" + result.value.id;
+
                 showSuccessDialogOnCreated();
                 clearForm();
             }
