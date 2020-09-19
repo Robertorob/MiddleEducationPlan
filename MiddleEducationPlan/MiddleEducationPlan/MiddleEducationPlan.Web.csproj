@@ -6,13 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\ProjectView.js" />
+    <Content Remove="wwwroot\CreateProject.js" />
+    <Content Remove="wwwroot\Project.js" />
     <Content Remove="wwwroot\UpdateProject.js" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\UpdateProject.js" />
-    <None Include="wwwroot\ProjectView.js" />
+    <None Include="wwwroot\Project\CreateProject.js" />
+    <None Include="wwwroot\Project\UpdateProject.js" />
+    <None Include="wwwroot\Project\Common.js" />
   </ItemGroup>
 
   <ItemGroup>

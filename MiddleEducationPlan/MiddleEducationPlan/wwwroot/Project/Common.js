@@ -1,11 +1,4 @@
-﻿
-
-$(document).ready(function () {
-    getProjectModel();
-    getProjectTypeSelectValues();
-});
-
-function getProjectTypeSelectValues() {
+﻿function getProjectTypeSelectValues() {
     $.get('/ProjectView/GetProjectTypes')
         .done((result) => {
             if (result.status === 0) {
@@ -55,28 +48,57 @@ function getProjectTypeSelectValues() {
         })
 }
 
-function getProjectModel() {
-    let id = $("#projectId").val();
-
-    $.get('/ProjectView/GetAsync/' + id)
-        .done((result) => {
-            if (result.status === 0) {
-                window.alert("success");
-            }
-            else {
-                getProjectTypesErrorDialog();
-                clearForm();
-            }
-        })
-        .fail(() => {
-            getProjectTypesErrorDialog();
-            clearForm();
-        })
+function showLoader() {
+    $('.loader').fadeIn();
 }
 
-function editForm() {
+function hideLoader() {
+    $('.loader').fadeOut();
+}
+
+function disablePage() {
+    $("#projectFormContainer").addClass("disabledContainer");
+}
+
+function enablePage() {
+    $("#projectFormContainer").removeClass("disabledContainer");
+}
+
+function getProjectTypesErrorDialog() {
+    showDialog('Error', 'Error while retrieving project types');
+}
+
+function showDialog(header, text, fade) {
+
+    let dialogOptions = {
+        title: header,
+        hide: { effect: 'explode' },
+        show: { effect: 'explode' }
+    };
+
+    if (fade === true) {
+       dialogOptions.dialogClass = 'no-close';
+    }
+
+    $('#dialog').dialog(dialogOptions);
+
+    $('#dialogBody').text(text);
+
+    $('#dialog').dialog('open');
+
+    if (fade === true) {
+        setTimeout(() => {
+            $('#dialog').dialog('close');
+        }, 3000)
+
+    }
 
 }
-function updateProject() {
 
+function clearForm() {
+    $('#projectName').val('');
+    $('#projectDescription').val('');
+
+    $('#projectType').val('');
+    $('#projectType').trigger('chosen:updated');
 }

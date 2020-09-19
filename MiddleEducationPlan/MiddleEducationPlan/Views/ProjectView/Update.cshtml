@@ -11,7 +11,7 @@
     @Html.ActionLink("Back to list", "Index", new { /* id=item.PrimaryKey */ })
 </p>
 
-@Html.Hidden("projectId", Model.Id)
+@Html.Hidden("hiddenProjectId", Model.Id)
 
 <div id="projectFormContainer" class="row">
     <form id="projectForm" style="width:100%">
@@ -19,21 +19,30 @@
             <thead>
             </thead>
             <tbody>
-                @await Html.PartialAsync("~/Views/ProjectView/CreateUpdateTemplate.cshtml")
                 <tr>
                     <td>
-                        <button type="button" style="width:100%" class="btn btn-secondary" onclick="editForm()">Edit</button>
+                        <lable class="col-form-label">Id</lable>
                     </td>
                     <td>
-                        <button type="button" style="width:100%" class="btn btn-primary" onclick="updateProject()">Send</button>
+                        <input type="text" id="projectId" class="height30 form-control" disabled/>
                     </td>
                 </tr>
+                @await Html.PartialAsync("~/Views/ProjectView/CreateUpdateTemplate.cshtml")
+            <tr>
+                <td id="projectEditCell">
+                    <button id="projectEditButton" type="button" style="width:100%" class="btn btn-secondary" onclick="editProject()">Edit</button>
+                </td>
+                <td id="projectCancelCell" style="display:none">
+                    <button id="projectCancelButton" type="button" style="width:100%" class="btn btn-secondary" onclick="cancel()">Cancel</button>
+                </td>
+                <td>
+                    <button id="projectSendButton" type="button" style="width:100%" class="btn btn-primary" onclick="updateProject()">Send</button>
+                </td>
+            </tr>
             </tbody>
         </table>
     </form>
 </div>
 
-
-
-
-<script src="~/UpdateProject.js"></script>
+<script src="~/Project/UpdateProject.js"></script>
+<script src="~/Project/Common.js"></script>
