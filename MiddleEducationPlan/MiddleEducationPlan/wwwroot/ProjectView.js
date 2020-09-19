@@ -69,14 +69,14 @@ function createProject() {
         .done((result) => {
 
 
-            hideLoader();
+            //hideLoader();
 
-            enableForm();
+            //enableForm();
 
             if (result.status === 0) {
                 window.location.href = "/ProjectView/Update/" + result.value.id;
 
-                showSuccessDialogOnCreated();
+                //showSuccessDialogOnCreated();
                 clearForm();
             }
             else {

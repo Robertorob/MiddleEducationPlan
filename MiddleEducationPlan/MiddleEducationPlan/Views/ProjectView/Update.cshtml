@@ -21,8 +21,11 @@
             <tbody>
                 @await Html.PartialAsync("~/Views/ProjectView/CreateUpdateTemplate.cshtml")
                 <tr>
-                    <td colspan="2">
-                        <button type="button" style="width:100%" class="btn btn-primary" onclick="createProject()">Update</button>
+                    <td>
+                        <button type="button" style="width:100%" class="btn btn-secondary" onclick="editForm()">Edit</button>
+                    </td>
+                    <td>
+                        <button type="button" style="width:100%" class="btn btn-primary" onclick="updateProject()">Send</button>
                     </td>
                 </tr>
             </tbody>
