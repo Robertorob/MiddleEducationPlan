@@ -73,12 +73,20 @@ function showDialog(header, text, fade) {
     let dialogOptions = {
         title: header,
         hide: { effect: 'explode' },
-        show: { effect: 'explode' }
+        show: { effect: 'explode' },
+        buttons: [
+            {
+                text: "Ok",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }
+        ],
     };
 
-    if (fade === true) {
-       dialogOptions.dialogClass = 'no-close';
-    }
+    //if (fade === true) {
+    //   dialogOptions.dialogClass = 'no-close';
+    //}
 
     $('#dialog').dialog(dialogOptions);
 

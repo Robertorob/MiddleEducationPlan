@@ -148,29 +148,50 @@ namespace MiddleEducationPlan.Web.Controllers
         }
 
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateAsync(Guid id, [FromBody] UpdateProjectModel project)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState.GetErrorMessages());
+        //[HttpPut("{id}")]
+        //public async Task<ActionResult> UpdateAsync(Guid id, [FromBody] UpdateProjectModel project)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState.GetErrorMessages());
 
-            var result = await this.projectService.UpdateProjectAsync(id, project);
+        //    var result = await this.projectService.UpdateProjectAsync(id, project);
 
-            if (result == null)
-                return NotFound();
+        //    if (result == null)
+        //        return NotFound();
 
-            return Ok(result.Result);
-        }
+        //    return Ok(result.Result);
+        //}
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteAsync(Guid id)
+        //[HttpGet("ProjectView/Delete/{id}")]
+        public async Task<ResultModel<Guid>> DeleteAsync(Guid id)
         {
             var result = await this.projectService.GetProjectByIdAsync(id);
 
             if (result == null)
-                return NotFound();
+                return new ResultModel<Guid>
+                {
+                    Status = Status.Error,
+                    ErrorMessage = "Not found"
+                };
 
-            return Ok((await this.projectService.DeleteProjectByIdAsync(id)).Result);
+            try
+            {
+                await this.projectService.DeleteProjectByIdAsync(id);
+
+                return new ResultModel<Guid>
+                {
+                    Status = Status.Success,
+                    Value = id
+                };
+            }
+            catch (Exception exc)
+            {
+                return new ResultModel<Guid>
+                {
+                    Status = Status.Error,
+                    ErrorMessage = exc.Message
+                };
+            }
         }
     }
 }
