@@ -61,7 +61,7 @@ function getProjectTypeSelectValues() {
 }
 
 function getProjectModel() {
-    let id = $("#hiddenProjectId").val();
+    let id = $("#projectId").val();
 
     $.get('/ProjectView/GetAsync/' + id)
         .done((result) => {
@@ -81,6 +81,7 @@ function getProjectModel() {
 
 function fillProjectFields(model) {
     $('#projectId').val(model.id);
+    $('#projectCode').val(model.code);
     $('#projectName').val(model.name);
     $('#projectDescription').val(model.description);
 

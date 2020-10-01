@@ -89,6 +89,7 @@ namespace MiddleEducationPlan.Web.Controllers
             var model = new UpdateProjectModel
             {
                 Id = projectEntity.Id,
+                Code = projectEntity.Code,
                 Name = projectEntity.Name,
                 Description = projectEntity.Description,
                 ProjectType = (ProjectType)projectEntity.ProjectTypeInteger
@@ -151,6 +152,7 @@ namespace MiddleEducationPlan.Web.Controllers
                 Value = new UpdateProjectModel
                 {
                     Id = result.Id,
+                    Code = result.Code,
                     Name = result.Name,
                     Description = result.Description,
                     ProjectType = (ProjectType)result.ProjectTypeInteger
@@ -184,14 +186,7 @@ namespace MiddleEducationPlan.Web.Controllers
                     }
                     return new ResultModel<UpdateProjectModel>
                     {
-                        Status = Status.Success,
-                        Value = new UpdateProjectModel
-                        {
-                            Id = projectEntity.Id,
-                            Name = projectEntity.Name,
-                            Description = projectEntity.Description,
-                            ProjectType = (ProjectType)projectEntity.ProjectTypeInteger
-                        }
+                        Status = Status.Success
                     };
                 }
             }

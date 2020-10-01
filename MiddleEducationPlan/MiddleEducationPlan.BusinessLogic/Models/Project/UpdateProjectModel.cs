@@ -7,6 +7,7 @@ namespace MiddleEducationPlan.BusinessLogic.Models.Project
     public class UpdateProjectModel
     {
         public Guid? Id { get; set; }
+        public int Code { get; set; }
         [Required]
         public string Name { get; set; }
         public ProjectType ProjectType { get; set; }

@@ -11,7 +11,7 @@
     @Html.ActionLink("Back to list", "Index", new { /* id=item.PrimaryKey */ })
 </p>
 
-@Html.Hidden("hiddenProjectId", Model.Id)
+@Html.Hidden("projectId", Model.Id)
 
 <div id="projectFormContainer" class="row">
     <form id="projectForm" style="width:100%">
@@ -21,10 +21,10 @@
             <tbody>
                 <tr>
                     <td>
-                        <lable class="col-form-label">Id</lable>
+                        <lable class="col-form-label">Code</lable>
                     </td>
                     <td>
-                        <input type="text" id="projectId" class="height30 form-control" disabled/>
+                        <input type="text" id="projectCode" class="height30 form-control" disabled/>
                     </td>
                 </tr>
                 @await Html.PartialAsync("~/Views/ProjectView/CreateUpdateTemplate.cshtml")
