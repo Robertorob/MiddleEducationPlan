@@ -1,9 +1,13 @@
 ﻿
 
 $(document).ready(function () {
-    setFormVisibility(false);
+    setFormEnabled(false);
     getProjectModel();
     getProjectTypeSelectValues();
+
+    $('#projectName').change(() => {
+        validate();
+    })
 });
 
 function getProjectTypeSelectValues() {
@@ -84,17 +88,28 @@ function fillProjectFields(model) {
     $('#projectType').trigger('chosen:updated');
 }
 
+function hideValidationErrors() {
+    $('label.error').hide();
+    $('#projectName').removeClass('error');
+}
+
 function cancel() {
-    setFormVisibility(false);
+    getProjectModel();
+    switchFormToDisabled();
+    hideValidationErrors();
+}
+
+function switchFormToDisabled() {
+    setFormEnabled(false);
     setEditButton();
 }
 
 function editProject() {
-    setFormVisibility(true);
+    setFormEnabled(true);
     setCancelButton();
 }
 
-function setFormVisibility(enabled) {
+function setFormEnabled(enabled) {
     enabled = !enabled;
     $('#projectName').prop('disabled', enabled);
     $('#projectDescription').prop('disabled', enabled);
@@ -116,5 +131,42 @@ function setEditButton() {
 }
 
 function updateProject() {
+    if (validate() === false) {
+        return;
+    }
 
+    let project = getProjectFromPage();
+
+    showLoader();
+    disablePage();
+
+    $.post('/ProjectView/UpdatePost', project)
+        .done((result) => {
+            if (result.status === 0) {
+                hideLoader();
+                enablePage();
+                showUpdatedSuccessfullyDialog();
+                switchFormToDisabled();
+            }
+            else {
+                hideLoader();
+                enablePage();
+                showErrorDialogOnUpdate(result.errorMessage);
+                clearForm();
+            }
+        })
+        .fail(() => {
+            hideLoader();
+            enablePage();
+            showErrorDialogOnUpdate(result.errorMessage);
+            clearForm();
+        })
+}
+
+function showUpdatedSuccessfullyDialog() {
+    showDialog('Success', 'Successfully updated', false);
+}
+
+function showErrorDialogOnUpdate(errorMessage) {
+    showDialog('Error', errorMessage, false);
 }

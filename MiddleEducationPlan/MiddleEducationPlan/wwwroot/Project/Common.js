@@ -84,10 +84,6 @@ function showDialog(header, text, fade) {
         ],
     };
 
-    //if (fade === true) {
-    //   dialogOptions.dialogClass = 'no-close';
-    //}
-
     $('#dialog').dialog(dialogOptions);
 
     $('#dialogBody').text(text);
@@ -98,9 +94,7 @@ function showDialog(header, text, fade) {
         setTimeout(() => {
             $('#dialog').dialog('close');
         }, 3000)
-
     }
-
 }
 
 function clearForm() {
@@ -109,4 +103,26 @@ function clearForm() {
 
     $('#projectType').val('');
     $('#projectType').trigger('chosen:updated');
+}
+
+function validate() {
+    let projectNameValidated = $('#projectForm').validate().element('#projectName');
+    let projectTypeValidated = $('#projectForm').validate().element('#projectType');
+
+    return projectNameValidated && projectTypeValidated;
+}
+
+function getProjectFromPage() {
+    let id = $('#projectId').val();
+    let name = $('#projectName').val();
+    let description = $('#projectDescription').val();
+    let projectType = $('#projectType').val();
+
+    let project = {};
+    project.id = id;
+    project.Name = name;
+    project.Description = description;
+    project.ProjectType = projectType;
+
+    return project;
 }

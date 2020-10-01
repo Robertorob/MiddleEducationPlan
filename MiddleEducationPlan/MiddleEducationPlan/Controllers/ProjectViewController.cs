@@ -40,31 +40,42 @@ namespace MiddleEducationPlan.Web.Controllers
         [HttpPost]
         public async Task<ResultModel<UpdateProjectModel>> CreatePost(AddProjectModel project)
         {
-            if (!ModelState.IsValid)
-                return new ResultModel<UpdateProjectModel>
-                {
-                    Status = Status.Error,
-                    ErrorMessage = "Model is invalid"
-                };
-
-            if (ModelState.IsValid)
+            try
             {
-                var projectEntity = (ProjectEntity)(await this.projectService.AddProjectAsync(project)).Result;
-                if (projectEntity == null)
-                {
+                if (!ModelState.IsValid)
                     return new ResultModel<UpdateProjectModel>
                     {
                         Status = Status.Error,
-                        ErrorMessage = "Internal server error"
+                        ErrorMessage = "Model is invalid"
+                    };
+
+                if (ModelState.IsValid)
+                {
+                    var projectEntity = (ProjectEntity)(await this.projectService.AddProjectAsync(project)).Result;
+                    if (projectEntity == null)
+                    {
+                        return new ResultModel<UpdateProjectModel>
+                        {
+                            Status = Status.Error,
+                            ErrorMessage = "Internal server error"
+                        };
+                    }
+                    return new ResultModel<UpdateProjectModel>
+                    {
+                        Status = Status.Success,
+                        Value = new UpdateProjectModel
+                        {
+                            Id = projectEntity.Id
+                        }
                     };
                 }
+            }
+            catch (Exception exc)
+            {
                 return new ResultModel<UpdateProjectModel>
                 {
-                    Status = Status.Success,
-                    Value = new UpdateProjectModel
-                    {
-                        Id = projectEntity.Id
-                    }
+                    Status = Status.Error,
+                    ErrorMessage = $"Internal server error: {exc.Message}"
                 };
             }
 
@@ -148,19 +159,53 @@ namespace MiddleEducationPlan.Web.Controllers
         }
 
 
-        //[HttpPut("{id}")]
-        //public async Task<ActionResult> UpdateAsync(Guid id, [FromBody] UpdateProjectModel project)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState.GetErrorMessages());
+        [HttpPost]
+        public async Task<ResultModel<UpdateProjectModel>> UpdatePost(UpdateProjectModel project)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return new ResultModel<UpdateProjectModel>
+                    {
+                        Status = Status.Error,
+                        ErrorMessage = "Model is invalid"
+                    };
 
-        //    var result = await this.projectService.UpdateProjectAsync(id, project);
+                if (ModelState.IsValid)
+                {
+                    var projectEntity = (ProjectEntity)(await this.projectService.UpdateProjectAsync(project.Id ?? Guid.NewGuid(), project)).Result;
+                    if (projectEntity == null)
+                    {
+                        return new ResultModel<UpdateProjectModel>
+                        {
+                            Status = Status.Error,
+                            ErrorMessage = "Project not found"
+                        };
+                    }
+                    return new ResultModel<UpdateProjectModel>
+                    {
+                        Status = Status.Success,
+                        Value = new UpdateProjectModel
+                        {
+                            Id = projectEntity.Id,
+                            Name = projectEntity.Name,
+                            Description = projectEntity.Description,
+                            ProjectType = (ProjectType)projectEntity.ProjectTypeInteger
+                        }
+                    };
+                }
+            }
+            catch (Exception exc)
+            {
+                return new ResultModel<UpdateProjectModel>
+                {
+                    Status = Status.Error,
+                    ErrorMessage = $"Internal server error: {exc.Message}"
+                };
+            }
 
-        //    if (result == null)
-        //        return NotFound();
-
-        //    return Ok(result.Result);
-        //}
+            return null;
+        }
 
         //[HttpGet("ProjectView/Delete/{id}")]
         public async Task<ResultModel<Guid>> DeleteAsync(Guid id)
