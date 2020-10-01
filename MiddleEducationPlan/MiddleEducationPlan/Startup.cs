@@ -69,7 +69,7 @@ namespace MiddleEducationPlan.Web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action}/{id?}",
-                    defaults: new { controller = "ProjectView", action = "Create" });
+                    defaults: new { controller = "ProjectView", action = "Index" });
             });
         }
     }

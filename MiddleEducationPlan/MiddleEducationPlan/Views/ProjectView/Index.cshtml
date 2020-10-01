@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MiddleEducationPlan.BusinessLogic.TableEntities.ProjectEntity>
+﻿@model IEnumerable<MiddleEducationPlan.Web.Models.ProjectModel>
 
 @{
     ViewData["Title"] = "Projects";
@@ -10,7 +10,7 @@
 <p>
     @Html.ActionLink("Create new", "Create", new { /* id=item.PrimaryKey */ })
 </p>
-<table class="table" id="projectTable">
+<table class="table text-center" id="projectTable">
     <thead>
         <tr>
             <th>
@@ -19,14 +19,14 @@
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.Description)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.ProjectType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProjectTypeInteger)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Timestamp)
+                Created at
             </th>
             <th></th>
         </tr>
@@ -41,14 +41,15 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.Description)
+                </td>*@
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProjectType)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.ProjectTypeInteger)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Timestamp)
+                    @*@Html.DisplayFor(modelItem => item.Timestamp)*@
+                    <span>@item.CreatedAt.ToString("M'/'d'/'yyyy hh:mm")</span>
                 </td>
                 <td>
                     <button class="btn btn-primary" onclick="updateProject(this)">Edit</button>

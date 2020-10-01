@@ -29,7 +29,15 @@ namespace MiddleEducationPlan.Web.Controllers
             if (result.Count == 0)
                 return NotFound();
 
-            return View(result.OrderByDescending(f => f.Code));
+            return View(result.OrderByDescending(f => f.Code).Select(f => new ProjectModel
+            {
+                Id = f.Id,
+                Code = f.Code,
+                Name = f.Name,
+                Description = f.Description,
+                ProjectType = ((ProjectType)f.ProjectTypeInteger).ToString(),
+                CreatedAt = f.Timestamp.UtcDateTime
+            }));
         }
 
         public IActionResult Create()
