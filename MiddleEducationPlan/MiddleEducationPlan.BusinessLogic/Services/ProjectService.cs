@@ -56,7 +56,7 @@ namespace MiddleEducationPlan.BusinessLogic.Services
             projectEntity.Name = project.Name;
             projectEntity.ProjectTypeInteger = (int)project.ProjectType;
             projectEntity.Description = project.Description;
-            if(projectEntity.Owners.Any())
+            if(projectEntity.Owners != null && projectEntity.Owners.Any())
                 projectEntity.Owners = string.Join(';', project.Owners);
 
             return await this.storageAccountService.UpdateEntityAsync(projectEntity);
