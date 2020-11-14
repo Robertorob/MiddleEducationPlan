@@ -42,6 +42,14 @@ namespace MiddleEducationPlan.Web
                 return  new StorageAccountService<ProjectEntity>(cloudTable);
             });
 
+            services.AddTransient<IStorageAccountService<TaskEntity>>(s =>
+            {
+                var cloudTableClientFactory = s.GetService<ICloudTableClientFactory>();
+                var cloudTableClient = cloudTableClientFactory.GetCloudTableClient();
+                var cloudTable = cloudTableClient.GetTableReference(TaskService.ENTITY_NAME);
+                return new StorageAccountService<TaskEntity>(cloudTable);
+            });
+
             services.AddControllersWithViews();
 
             services.AddAzureClients(builder =>

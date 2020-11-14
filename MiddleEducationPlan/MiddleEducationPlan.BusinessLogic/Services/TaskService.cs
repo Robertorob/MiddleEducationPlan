@@ -13,15 +13,12 @@ namespace MiddleEducationPlan.BusinessLogic.Services
 {
     public class TaskService : ITaskService
     {
-        private const string ENTITY_NAME = "Task";
-        private readonly CloudTable cloudTable;
-        private readonly StorageAccountService<TaskEntity> storageAccountService;
+        public const string ENTITY_NAME = "Task";
+        private readonly IStorageAccountService<TaskEntity> storageAccountService;
 
-        public TaskService(ICloudTableClientFactory cloudTableClientFactory)
+        public TaskService(ICloudTableClientFactory cloudTableClientFactory, IStorageAccountService<TaskEntity> storageAccountService)
         {
-            var cloudTableClient = cloudTableClientFactory.GetCloudTableClient();
-            this.cloudTable = cloudTableClient.GetTableReference(TaskService.ENTITY_NAME);
-            this.storageAccountService = new StorageAccountService<TaskEntity>(this.cloudTable);
+            this.storageAccountService = storageAccountService;
         }
 
         public async Task<TableResult> AddTaskAsync(AddTaskModel task)
@@ -66,7 +63,7 @@ namespace MiddleEducationPlan.BusinessLogic.Services
             if (!string.IsNullOrEmpty(combined))
                 query = query.Where(combined);
 
-            var tasks = await this.cloudTable.ExecuteQuerySegmentedAsync(query, null);
+            var tasks = await this.storageAccountService.ExecuteQuerySegmentedAsync(query);
 
             return tasks.ToList();
         }
