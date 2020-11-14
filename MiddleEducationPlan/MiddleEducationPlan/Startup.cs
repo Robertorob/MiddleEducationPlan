@@ -13,6 +13,7 @@ using MiddleEducationPlan.Common.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Services;
 using Microsoft.AspNetCore.Mvc;
+using MiddleEducationPlan.BusinessLogic.TableEntities;
 
 namespace MiddleEducationPlan.Web
 {
@@ -32,6 +33,14 @@ namespace MiddleEducationPlan.Web
             services.AddSingleton<ICloudTableClientFactory, CloudTableClientFactory>();
             services.AddSingleton<IProjectService, ProjectService>();
             services.AddSingleton<ITaskService, TaskService>();
+
+            services.AddTransient<IStorageAccountService<ProjectEntity>>(s =>
+            {
+                var cloudTableClientFactory = s.GetService<ICloudTableClientFactory>();
+                var cloudTableClient = cloudTableClientFactory.GetCloudTableClient();
+                var cloudTable = cloudTableClient.GetTableReference(ProjectService.ENTITY_NAME);
+                return  new StorageAccountService<ProjectEntity>(cloudTable);
+            });
 
             services.AddControllersWithViews();
 

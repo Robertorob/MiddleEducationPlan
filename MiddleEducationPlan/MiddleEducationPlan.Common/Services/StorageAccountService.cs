@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MiddleEducationPlan.Common.Services
 {
-    public class StorageAccountService<TEntity> where TEntity : TableEntity, new()
+    public class StorageAccountService<TEntity> : IStorageAccountService<TEntity> where TEntity : TableEntity, new()
     {
         protected readonly CloudTable cloudTable;
 
@@ -17,6 +17,8 @@ namespace MiddleEducationPlan.Common.Services
 
         public async Task<TableResult> AddEntityAsync(TableEntity entity)
         {
+            await this.cloudTable.CreateIfNotExistsAsync();
+
             var insertOperation = TableOperation.Insert(entity);
 
             return await this.cloudTable.ExecuteAsync(insertOperation);
@@ -47,6 +49,11 @@ namespace MiddleEducationPlan.Common.Services
             var deleteOperation = TableOperation.Delete(entity);
 
             return await this.cloudTable.ExecuteAsync(deleteOperation);
+        }
+
+        public async Task<TableQuerySegment<TEntity>> ExecuteQuerySegmentedAsync(TableQuery<TEntity> query)
+        {
+            return await this.cloudTable.ExecuteQuerySegmentedAsync(query, null);
         }
     }
 }
