@@ -29,10 +29,9 @@ namespace MiddleEducationPlan.Web.Controllers
             if (result.Count == 0)
                 return NotFound();
 
-            return View(result.OrderByDescending(f => f.Code).Select(f => new ProjectModel
+            return View(result.OrderByDescending(f => f.Timestamp).Select(f => new ProjectModel
             {
                 Id = f.Id,
-                Code = f.Code,
                 Name = f.Name,
                 Description = f.Description,
                 ProjectType = ((ProjectType)f.ProjectTypeInteger).ToString(),
@@ -97,7 +96,6 @@ namespace MiddleEducationPlan.Web.Controllers
             var model = new UpdateProjectModel
             {
                 Id = projectEntity.Id,
-                Code = projectEntity.Code,
                 Name = projectEntity.Name,
                 Description = projectEntity.Description,
                 ProjectType = (ProjectType)projectEntity.ProjectTypeInteger
@@ -160,7 +158,6 @@ namespace MiddleEducationPlan.Web.Controllers
                 Value = new UpdateProjectModel
                 {
                     Id = result.Id,
-                    Code = result.Code,
                     Name = result.Name,
                     Description = result.Description,
                     ProjectType = (ProjectType)result.ProjectTypeInteger

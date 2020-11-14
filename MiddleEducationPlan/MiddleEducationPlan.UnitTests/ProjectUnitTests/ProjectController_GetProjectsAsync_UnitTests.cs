@@ -14,7 +14,7 @@ namespace MiddleEducationPlan.UnitTests.Project
     public class ProjectController_GetProjectsAsync_UnitTests
     {
         private ProjectController projectController;
-        private GetProjectModel getProjectWithCode3;
+        private GetProjectModel getProjectWithSomeName;
         private GetProjectModel getProject;
         private MockProjectCloudTableClient mockProjectCloudTableClient;
 
@@ -22,7 +22,7 @@ namespace MiddleEducationPlan.UnitTests.Project
         public void Setup()
         {
             this.getProject = new GetProjectModel();
-            this.getProjectWithCode3 = new GetProjectModel { Code = 3 };
+            this.getProjectWithSomeName = new GetProjectModel { Name = "nonExistingName" };
 
             (this.mockProjectCloudTableClient, this.projectController) = UnitTestSetupHelper.GetProjectControllerAndCloudTableClientMock();
         }
@@ -40,7 +40,7 @@ namespace MiddleEducationPlan.UnitTests.Project
         [Test]
         public async Task GetProjectsAsync_NonExistingProject_NotFound404()
         {
-            var result = await this.projectController.GetProjectsAsync(this.getProjectWithCode3) as NotFoundResult;
+            var result = await this.projectController.GetProjectsAsync(this.getProjectWithSomeName) as NotFoundResult;
 
             Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.NotFound);
