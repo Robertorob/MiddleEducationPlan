@@ -81,7 +81,6 @@ function getProjectModel() {
 
 function fillProjectFields(model) {
     $('#projectId').val(model.id);
-    $('#projectCode').val(model.code);
     $('#projectName').val(model.name);
     $('#projectDescription').val(model.description);
 

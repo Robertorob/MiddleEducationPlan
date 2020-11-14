@@ -94,7 +94,6 @@ function showDialog(header, text, fade) {
 }
 
 function clearForm() {
-    $('#projectCode').val('');
     $('#projectName').val('');
     $('#projectDescription').val('');
 
@@ -111,14 +110,12 @@ function validate() {
 
 function getProjectFromPage() {
     let id = $('#projectId').val();
-    let code = $('#projectCode').val();
     let name = $('#projectName').val();
     let description = $('#projectDescription').val();
     let projectType = $('#projectType').val();
 
     let project = {};
     project.id = id;
-    project.code = code;
     project.Name = name;
     project.Description = description;
     project.ProjectType = projectType;
