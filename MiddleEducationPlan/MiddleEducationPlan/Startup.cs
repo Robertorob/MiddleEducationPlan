@@ -39,7 +39,7 @@ namespace MiddleEducationPlan.Web
                 var cloudTableClientFactory = s.GetService<ICloudTableClientFactory>();
                 var cloudTableClient = cloudTableClientFactory.GetCloudTableClient();
                 var cloudTable = cloudTableClient.GetTableReference(ProjectService.ENTITY_NAME);
-                return  new StorageAccountService<ProjectEntity>(cloudTable);
+                return new StorageAccountService<ProjectEntity>(cloudTable);
             });
 
             services.AddTransient<IStorageAccountService<TaskEntity>>(s =>
