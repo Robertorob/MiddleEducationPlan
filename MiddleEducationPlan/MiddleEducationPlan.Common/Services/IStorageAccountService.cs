@@ -8,7 +8,7 @@ namespace MiddleEducationPlan.Common.Services
     {
         Task<TableResult> AddEntityAsync(TableEntity entity);
         Task<TableResult> DeleteEntityByIdAsync(Guid id);
-        Task<TEntity> GetEntityById(Guid id);
+        Task<TEntity> GetEntityByIdAsync(Guid id);
         Task<TableResult> UpdateEntityAsync(TableEntity entity);
 
         Task<TableQuerySegment<TEntity>> ExecuteQuerySegmentedAsync(TableQuery<TEntity> query);

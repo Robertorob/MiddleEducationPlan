@@ -31,7 +31,7 @@ namespace MiddleEducationPlan.Common.Services
             return await this.cloudTable.ExecuteAsync(insertOrReplaceOperation);
         }
 
-        public async Task<TEntity> GetEntityById(Guid id)
+        public async Task<TEntity> GetEntityByIdAsync(Guid id)
         {
             var query = new TableQuery<TEntity>()
                 .Where(TableQuery.GenerateFilterConditionForGuid("Id", QueryComparisons.Equal, id));

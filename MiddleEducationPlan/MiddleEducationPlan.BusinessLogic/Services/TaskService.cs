@@ -16,7 +16,7 @@ namespace MiddleEducationPlan.BusinessLogic.Services
         public const string ENTITY_NAME = "Task";
         private readonly IStorageAccountService<TaskEntity> storageAccountService;
 
-        public TaskService(ICloudTableClientFactory cloudTableClientFactory, IStorageAccountService<TaskEntity> storageAccountService)
+        public TaskService(IStorageAccountService<TaskEntity> storageAccountService)
         {
             this.storageAccountService = storageAccountService;
         }
@@ -37,7 +37,7 @@ namespace MiddleEducationPlan.BusinessLogic.Services
 
         public async Task<TableResult> UpdateTaskAsync(Guid id, UpdateTaskModel task)
         {
-            var taskEntity = await this.storageAccountService.GetEntityById(id);
+            var taskEntity = await this.storageAccountService.GetEntityByIdAsync(id);
 
             if (taskEntity == null)
                 return null;
@@ -51,7 +51,7 @@ namespace MiddleEducationPlan.BusinessLogic.Services
 
         public async Task<TaskEntity> GetTaskByIdAsync(Guid id)
         {
-            return await this.storageAccountService.GetEntityById(id);
+            return await this.storageAccountService.GetEntityByIdAsync(id);
         }
 
         public async Task<List<TaskEntity>> GetTasksAsync(GetTaskModel filter)

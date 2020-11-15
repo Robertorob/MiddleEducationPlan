@@ -18,7 +18,7 @@ namespace MiddleEducationPlan.BusinessLogic.Services
         private readonly ITaskService taskService;
         private readonly IStorageAccountService<ProjectEntity> storageAccountService;
 
-        public ProjectService(ITaskService taskService, ICloudTableClientFactory cloudTableClientFactory, IStorageAccountService<ProjectEntity> storageAccountService)
+        public ProjectService(ITaskService taskService, IStorageAccountService<ProjectEntity> storageAccountService)
         {
             this.taskService = taskService;
             this.storageAccountService = storageAccountService;
@@ -40,7 +40,7 @@ namespace MiddleEducationPlan.BusinessLogic.Services
 
         public async Task<TableResult> UpdateProjectAsync(Guid id, UpdateProjectModel project)
         {
-            var projectEntity = await this.storageAccountService.GetEntityById(id);
+            var projectEntity = await this.storageAccountService.GetEntityByIdAsync(id);
 
             if (projectEntity == null)
                 return null;
@@ -54,7 +54,7 @@ namespace MiddleEducationPlan.BusinessLogic.Services
 
         public async Task<ProjectEntity> GetProjectByIdAsync(Guid id)
         {
-            var project = await this.storageAccountService.GetEntityById(id);
+            var project = await this.storageAccountService.GetEntityByIdAsync(id);
             var tasks = await this.taskService.GetTasksAsync(new GetTaskModel
             {
                 ProjectId = id
@@ -84,7 +84,7 @@ namespace MiddleEducationPlan.BusinessLogic.Services
                 } 
             }
 
-            return projects.Where(f => f.RowKey != "0").ToList();
+            return projects.ToList();
         }
 
         private string CombineProjectFilters(GetProjectModel filter)
