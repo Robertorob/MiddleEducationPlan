@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
 using MiddleEducationPlan.UnitTests.Helpers;
-using MiddleEducationPlan.UnitTests.Project.Mock;
 using MiddleEducationPlan.Web.Controllers;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -16,7 +15,6 @@ namespace MiddleEducationPlan.UnitTests.Project
         private ProjectController projectController;
         private GetProjectModel getProjectWithSomeName;
         private GetProjectModel getProject;
-        private MockProjectCloudTableClient mockProjectCloudTableClient;
 
         [SetUp]
         public void Setup()
@@ -24,7 +22,7 @@ namespace MiddleEducationPlan.UnitTests.Project
             this.getProject = new GetProjectModel();
             this.getProjectWithSomeName = new GetProjectModel { Name = "nonExistingName" };
 
-            (this.mockProjectCloudTableClient, this.projectController) = UnitTestSetupHelper.GetProjectControllerAndCloudTableClientMock();
+            this.projectController = UnitTestSetupHelper.GetProjectControllerMock();
         }
 
         [Test]
@@ -34,7 +32,7 @@ namespace MiddleEducationPlan.UnitTests.Project
 
             Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.OK);
-            Assert.AreEqual(((List<ProjectEntity>)result.Value).Count, this.mockProjectCloudTableClient.mockProjectCloudTable.projects.Count);
+            Assert.AreEqual(((List<ProjectEntity>)result.Value).Count, UnitTestSetupHelper.ExistingProjects.Count);
         }
 
         [Test]

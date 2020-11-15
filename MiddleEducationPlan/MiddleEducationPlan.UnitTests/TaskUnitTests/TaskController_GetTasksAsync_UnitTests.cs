@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using MiddleEducationPlan.BusinessLogic.Models.Task;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
 using MiddleEducationPlan.UnitTests.Helpers;
-using MiddleEducationPlan.UnitTests.TaskUnitTests.Mock;
 using MiddleEducationPlan.Web.Controllers;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -15,14 +14,13 @@ namespace MiddleEducationPlan.UnitTests.TaskUnitTests
     {
         private TaskController taskController;
         private GetTaskModel getTask;
-        private MockTaskCloudTableClient mockTaskCloudTableClient;
 
         [SetUp]
         public void Setup()
         {
             this.getTask = new GetTaskModel();
 
-            (this.mockTaskCloudTableClient, this.taskController) = UnitTestSetupHelper.GetTaskControllerAndCloudTableClientMock();
+            this.taskController = UnitTestSetupHelper.GetTaskControllerMock();
         }
 
         [Test]
@@ -32,7 +30,7 @@ namespace MiddleEducationPlan.UnitTests.TaskUnitTests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.OK);
-            Assert.AreEqual(((List<TaskEntity>)result.Value).Count, this.mockTaskCloudTableClient.mockTaskCloudTable.tasks.Count);
+            Assert.AreEqual(((List<TaskEntity>)result.Value).Count, UnitTestSetupHelper.ExistingTasks.Count);
         }
     }
 }

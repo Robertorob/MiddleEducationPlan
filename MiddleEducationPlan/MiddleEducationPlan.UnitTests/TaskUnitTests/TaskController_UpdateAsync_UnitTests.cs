@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using MiddleEducationPlan.BusinessLogic.Models.Task;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
 using MiddleEducationPlan.UnitTests.Helpers;
-using MiddleEducationPlan.UnitTests.TaskUnitTests.Mock;
 using MiddleEducationPlan.Web.Controllers;
 using NUnit.Framework;
 using System;
@@ -15,23 +14,22 @@ namespace MiddleEducationPlan.UnitTests.TaskUnitTests
     {
         private TaskController taskController;
         private UpdateTaskModel updateTaskModel;
-        private MockTaskCloudTableClient mockTaskCloudTableClient;
 
         [SetUp]
         public void Setup()
         {
             this.updateTaskModel = new UpdateTaskModel
             {
-                Name = "Updated name"
+                Name = "update"
             };
 
-            (this.mockTaskCloudTableClient, this.taskController) = UnitTestSetupHelper.GetTaskControllerAndCloudTableClientMock();
+            this.taskController = UnitTestSetupHelper.GetTaskControllerMock();
         }
 
         [Test]
         public async Task UpdateAsync_ExistingTasks_Ok200()
         {
-            var result = await this.taskController.UpdateAsync(this.mockTaskCloudTableClient.mockTaskCloudTable.tasks[1].Id, this.updateTaskModel) as ObjectResult;
+            var result = await this.taskController.UpdateAsync(UnitTestSetupHelper.ExistingTasks[0].Id, this.updateTaskModel) as ObjectResult;
 
             Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.OK);

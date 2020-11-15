@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
 using MiddleEducationPlan.UnitTests.Helpers;
-using MiddleEducationPlan.UnitTests.Project.Mock;
 using MiddleEducationPlan.Web.Controllers;
 using NUnit.Framework;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +12,6 @@ namespace MiddleEducationPlan.UnitTests.Project
     public class ProjectController_AddAsync_UnitTests
     {
         private ProjectController projectController;
-        private MockProjectCloudTableClient mockProjectCloudTableClient;
         private AddProjectModel addProjectModel;
         private AddProjectModel addEmptyNameProjectModel;
 
@@ -22,11 +20,11 @@ namespace MiddleEducationPlan.UnitTests.Project
         {
             this.addProjectModel = new AddProjectModel
             {
-                Name = "add project"
+                Name = "project1"
             };
             this.addEmptyNameProjectModel = new AddProjectModel();
 
-            (this.mockProjectCloudTableClient, this.projectController) = UnitTestSetupHelper.GetProjectControllerAndCloudTableClientMock();
+            this.projectController = UnitTestSetupHelper.GetProjectControllerMock();
         }
 
         [Test]

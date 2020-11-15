@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using MiddleEducationPlan.UnitTests.Helpers;
-using MiddleEducationPlan.UnitTests.Project.Mock;
 using MiddleEducationPlan.Web.Controllers;
 using NUnit.Framework;
 using System;
@@ -12,18 +11,17 @@ namespace MiddleEducationPlan.UnitTests.Project
     public class ProjectController_GetAsync_UnitTests
     {
         private ProjectController projectController;
-        private MockProjectCloudTableClient mockProjectCloudTableClient;
 
         [SetUp]
         public void Setup()
         {
-            (this.mockProjectCloudTableClient, this.projectController) = UnitTestSetupHelper.GetProjectControllerAndCloudTableClientMock();
+            this.projectController = UnitTestSetupHelper.GetProjectControllerMock();
         }
 
         [Test]
         public async Task GetAsync_ExistingProject_Ok200()
         {
-            var result = await this.projectController.GetAsync(this.mockProjectCloudTableClient.mockProjectCloudTable.projects[0].Id) as ObjectResult;
+            var result = await this.projectController.GetAsync(UnitTestSetupHelper.ExistingProjects[0].Id) as ObjectResult;
 
             Assert.IsNotNull(result);
             Assert.AreEqual(result.StatusCode, (int) HttpStatusCode.OK);

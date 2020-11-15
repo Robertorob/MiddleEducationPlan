@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MiddleEducationPlan.BusinessLogic.Models.Task;
 using MiddleEducationPlan.UnitTests.Helpers;
-using MiddleEducationPlan.UnitTests.TaskUnitTests.Mock;
 using MiddleEducationPlan.Web.Controllers;
 using NUnit.Framework;
 using System;
@@ -14,7 +13,6 @@ namespace MiddleEducationPlan.UnitTests.TaskUnitTests
     public class TaskController_AddAsync_UnitTests
     {
         private TaskController taskController;
-        private MockTaskCloudTableClient mockTaskCloudTableClient;
         private AddTaskModel addTaskModel;
         private AddTaskModel addEmptyNameTaskModel;
 
@@ -24,11 +22,11 @@ namespace MiddleEducationPlan.UnitTests.TaskUnitTests
             this.addTaskModel = new AddTaskModel
             {
                 ProjectId = Guid.NewGuid(),
-                Name = "add task"
+                Name = "task1"
             };
             this.addEmptyNameTaskModel = new AddTaskModel();
 
-            (this.mockTaskCloudTableClient, this.taskController) = UnitTestSetupHelper.GetTaskControllerAndCloudTableClientMock();
+            this.taskController = UnitTestSetupHelper.GetTaskControllerMock();
         }
 
         [Test]
