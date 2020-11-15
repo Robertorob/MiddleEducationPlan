@@ -12,7 +12,6 @@ using MiddleEducationPlan.Common.Services;
 using MiddleEducationPlan.Common.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Services;
-using Microsoft.AspNetCore.Mvc;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
 
 namespace MiddleEducationPlan.Web

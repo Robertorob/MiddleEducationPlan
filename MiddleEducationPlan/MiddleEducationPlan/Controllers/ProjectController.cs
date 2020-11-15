@@ -1,10 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
 using MiddleEducationPlan.Extensions;
+using System;
+using System.Threading.Tasks;
 
 namespace MiddleEducationPlan.Web.Controllers
 {

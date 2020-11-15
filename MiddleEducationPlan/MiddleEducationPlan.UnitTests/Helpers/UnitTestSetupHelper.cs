@@ -2,7 +2,6 @@
 using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Services;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
-using MiddleEducationPlan.Common.Interfaces;
 using MiddleEducationPlan.Common.Services;
 using MiddleEducationPlan.Web.Controllers;
 using Moq;

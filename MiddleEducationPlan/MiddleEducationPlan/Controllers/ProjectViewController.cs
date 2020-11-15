@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MiddleEducationPlan.BusinessLogic.Interfaces;
 using MiddleEducationPlan.BusinessLogic.Models.Project;
 using MiddleEducationPlan.BusinessLogic.TableEntities;
-using MiddleEducationPlan.Extensions;
 using MiddleEducationPlan.Web.Models;
 
 namespace MiddleEducationPlan.Web.Controllers
